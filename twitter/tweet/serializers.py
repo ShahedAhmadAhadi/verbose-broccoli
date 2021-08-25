@@ -7,5 +7,3 @@ class TweetSeializer(serializers.Serializer):
     text = serializers.CharField(max_length = 160)
     created_at = serializers.DateTimeField()
 
-
-

@@ -1,17 +1,18 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from .models import Tweet
 from .serializers import TweetSeializer
 from rest_framework.parsers import JSONParser
 
 # Create your views here.
-
+@api_view(['GET', 'POST'])
 def tweet(request):
     if request.method == 'GET':
         tweet = Tweet.objects.all()
-        tweet_serializer = TweetSeializer(tweet, many=True)
-        return Response(tweet_serializer.data)
+        serializer = TweetSeializer(tweet, many=True)
+        return Response(serializer.data)
     elif request.method == "POST":
         data = JSONParser().parse(request)
         tweet_serializer = TweetSeializer(data=data)
