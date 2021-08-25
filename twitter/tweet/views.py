@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.Response import Response
+from rest_framework.response import Response
 from .models import Tweet
 from .serializers import TweetSeializer
 from rest_framework.parsers import JSONParser
