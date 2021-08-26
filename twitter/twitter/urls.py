@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', tweet_view.tweet),
     path('accounts/', include('accounts.urls')),
+    path('demo/', tweet_view.DemoView.as_view())
 ]
