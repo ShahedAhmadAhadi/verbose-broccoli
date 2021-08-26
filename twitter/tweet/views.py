@@ -11,15 +11,18 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
+
 class DemoView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         print(request.headers)
-        return Response({'success': 'you are authenticated'})
+        return Response({"success": "you are authenticated"})
 
-@api_view(['GET', 'POST'])
+
+@api_view(["GET", "POST"])
 def tweet(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         tweet = Tweet.objects.all()
         serializer = TweetSeializer(tweet, many=True)
         return Response(serializer.data)
