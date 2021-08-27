@@ -3,10 +3,14 @@ from django.contrib.auth.models import User
 from .models import UserElementryData
 
 
+def response_maker_validator(*args, **kwargs):
+    
+
+
 class UserElementryDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        feilds = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name', 'email']
 
     def validate(self, attrs):
         first_name = attrs.get('first_name', '')

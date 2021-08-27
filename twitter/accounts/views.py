@@ -6,7 +6,7 @@ from .serializers import UserElementryDataSerializer
 
 # Create your views here.
 @api_view(['POST'])
-def register_phase_1(request):
+def register_phase_one(request):
     data = request.data
     serializer = UserElementryDataSerializer(data=data)
     serializer.is_valid(raise_exception=True)
