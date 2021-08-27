@@ -4,7 +4,21 @@ from .models import UserElementryData
 
 
 def response_maker_validator(*args, **kwargs):
-    
+    response_dict = {}
+    for i in kwargs:
+        response_dict_key = response_dict[i]
+        if i == 'username':
+            if not kwargs[i].isalnum():
+                response_dict_key = '[{response_dict_key} can only be [0-9], [a-z], [A-Z]]'
+        elif i == 'username' or i == 'email':
+            if kwargs[i] == None or kwargs[i] == '':
+                response_dict_key = '[This field is required]'
+        else:
+            if kwargs[i] == None or kwargs[i] == '':
+                response_dict_key = '[This field is required]'
+            elif not kwargs[i].isalpha():
+                response_dict_key = '[username can only be [a-z], [A-Z]]'
+        
 
 
 class UserElementryDataSerializer(serializers.ModelSerializer):
