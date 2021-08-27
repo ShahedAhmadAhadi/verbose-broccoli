@@ -6,18 +6,19 @@ from .models import UserElementryData
 def response_maker_validator(*args, **kwargs):
     response_dict = {}
     for i in kwargs:
-        response_dict_key = response_dict[i]
-        if i == 'username':
-            if not kwargs[i].isalnum():
-                response_dict_key = '[{response_dict_key} can only be [0-9], [a-z], [A-Z]]'
-        elif i == 'username' or i == 'email':
+        if i == 'username' or i == 'email':
             if kwargs[i] == None or kwargs[i] == '':
-                response_dict_key = '[This field is required]'
+                response_dict[i] = '[This field is required]'
+        elif i == 'username':
+            if not kwargs[i].isalnum():
+                response_dict[i] = '[{response_dict[i]} can only be [0-9], [a-z], [A-Z]]'
         else:
             if kwargs[i] == None or kwargs[i] == '':
-                response_dict_key = '[This field is required]'
+                response_dict[i] = '[This field is required]'
             elif not kwargs[i].isalpha():
-                response_dict_key = '[username can only be [a-z], [A-Z]]'
+                response_dict[i] = '[username can only be [a-z], [A-Z]]'
+
+        return response_dict
         
 
 
@@ -26,17 +27,25 @@ class UserElementryDataSerializer(serializers.ModelSerializer):
         model = User
         fields = ['first_name', 'last_name', 'email']
 
+    # def validate(self, attrs):
+    #     first_name = attrs.get('first_name', '')
+    #     last_name = attrs.get('last_name', '')
+    #     email = attrs.get('email', '')
+
+    #     if not first_name.isalpha():
+    #         raise serializers.ValidationError('The first_name should only be in [a-z, A-Z]')
+    #     if not last_name.isalpha():
+    #         raise serializers.ValidationError('The last_name should only be in [a-z, A-Z]')
+
+    #     return attrs
+
     def validate(self, attrs):
         first_name = attrs.get('first_name', '')
         last_name = attrs.get('last_name', '')
         email = attrs.get('email', '')
-
-        if not first_name.isalpha():
-            raise serializers.ValidationError('The first_name should only be in [a-z, A-Z]')
-        if not last_name.isalpha():
-            raise serializers.ValidationError('The last_name should only be in [a-z, A-Z]')
-
-        return attrs
+        print(first_name)
+        # validation_response =  response_maker_validator(first_name=first_name, last_name=last_name, email=email)
+        return super().validate(attrs)
 
     def create(self, validated_data):
         return UserElementryData.objects.create(**validated_data)
