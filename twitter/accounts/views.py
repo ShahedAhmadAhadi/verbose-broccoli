@@ -10,7 +10,7 @@ def register_phase_one(request):
     data = request.data
     serializer = UserElementryDataSerializer(data=data)
     serializer.is_valid(raise_exception=True)
-    serializer.save()
+    # serializer.save()
 
 
     user_data = serializer.data
