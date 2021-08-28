@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserElementryData
-from rest_framework.parsers import JSONParser
 
 
 def response_maker_validator(*args, **kwargs):
@@ -25,23 +24,12 @@ def response_maker_validator(*args, **kwargs):
 
 class UserElementryDataSerializer(serializers.ModelSerializer):
 
-    
+    first_name = serializers.CharField(min_length=6, max_length=16)
+    last_name = serializers.CharField(min_length=6, max_length=16)
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
-
-    # def validate(self, attrs):
-    #     first_name = attrs.get('first_name', '')
-    #     last_name = attrs.get('last_name', '')
-    #     email = attrs.get('email', '')
-
-    #     if not first_name.isalpha():
-    #         raise serializers.ValidationError('The first_name should only be in [a-z, A-Z]')
-    #     if not last_name.isalpha():
-    #         raise serializers.ValidationError('The last_name should only be in [a-z, A-Z]')
-
-    #     return attrs
 
     def validate(self, attrs):
         first_name = attrs.get('first_name', '')
