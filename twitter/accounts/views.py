@@ -3,6 +3,7 @@ from rest_framework import serializers, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserElementryDataSerializer
+from .models import UserElementryData
 
 # Create your views here.
 @api_view(["POST"])
