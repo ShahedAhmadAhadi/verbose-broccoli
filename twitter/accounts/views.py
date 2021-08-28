@@ -14,5 +14,6 @@ def register_phase_one(request):
 
 
     user_data = serializer.data
+    print(serializer.data)
     return Response(user_data, status=status.HTTP_201_CREATED)
 

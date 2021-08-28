@@ -24,6 +24,9 @@ def response_maker_validator(*args, **kwargs):
 
 
 class UserElementryDataSerializer(serializers.ModelSerializer):
+
+    
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
