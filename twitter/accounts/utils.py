@@ -1,3 +1,5 @@
+from django.core.mail import EmailMessage
 
 def send_email(data):
-    pass
+    email = EmailMessage(subject=data['email_subject'], body=data['email_body'])
+    email.send()
