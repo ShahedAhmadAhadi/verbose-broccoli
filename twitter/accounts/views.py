@@ -27,10 +27,10 @@ def register_phase_one(request):
     current_site = get_current_site(request).domain
     relative_link = reverse('verify_email')
 
-    absolute_url = 'http://'+current_site+relative_link+"?token="+token
+    absolute_url = 'http://'+current_site+relative_link+"?token="+str(token)
     email_body = 'Hi! '+email.first_name+' '+email.last_name+' Use the link below to verify your email \n'+absolute_url
 
-    data = {'email_subject': 'Verify you E-mail', 'email_body': email_body}
+    data = {'email_subject': 'Verify you E-mail', 'email_body': email_body, 'email_to':email.email}
 
     send_email(data)
 
