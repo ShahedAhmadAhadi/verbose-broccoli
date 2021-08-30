@@ -9,6 +9,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.core.mail import send_mail
 from .utils import send_email
+from django.conf import settings
+import jwt
 
 # Create your views here.
 @api_view(["POST"])
@@ -38,5 +40,11 @@ def register_phase_one(request):
     return Response(user_data, status=status.HTTP_201_CREATED)
 
 
+@api_view(['GET'])
 def verify_email(request):
-    pass
+    token = request.GET.get('token')
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY)
+        user=UserElementryData.objects.get(id)
+    except :
+        pass
