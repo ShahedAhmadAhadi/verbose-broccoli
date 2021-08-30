@@ -6,6 +6,7 @@ from .serializers import UserElementryDataSerializer
 from .models import UserElementryData
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core.mail import send_mail
 from .utils import send_email
@@ -46,8 +47,14 @@ def verify_email(request):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY)
         user=UserElementryData.objects.get(id=payload['user_id'])
+        if not user.is_verified:
+            user.is_verified = True
+            user.save()
 
-        user.is_verified = True
-        user
-    except :
-        pass
+        return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
+
+    except jwt.ExpiredSignatureError:
+        return Response({'error': 'Acctivition Expired'}, status=status.HTTP_400_BAD_REQUEST)
+    except jwt.exceptions.DecodeError:
+        return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
+        

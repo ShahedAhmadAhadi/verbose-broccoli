@@ -14,7 +14,3 @@ class UserElementryData(models.Model):
     def __str__(self):
         return self.email
 
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_verified = models.BooleanField(default=False)
