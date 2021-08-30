@@ -46,5 +46,8 @@ def verify_email(request):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY)
         user=UserElementryData.objects.get(id=payload['user_id'])
+
+        user.is_verified = True
+        user
     except :
         pass
