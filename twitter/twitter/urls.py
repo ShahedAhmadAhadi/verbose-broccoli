@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from tweet import views as tweet_view
+from rest_framework import permissions
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', tweet_view.tweet),
     path('accounts/', include('accounts.urls')),
-    path('demo/', tweet_view.DemoView.as_view())
+    path('demo/', tweet_view.DemoView.as_view()),
 ]

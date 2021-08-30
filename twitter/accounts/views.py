@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from rest_framework import serializers, status
-from rest_framework.decorators import api_view
+from rest_framework import views
 from rest_framework.response import Response
-from .serializers import UserElementryDataSerializer
+from .serializers import UserElementryDataSerializer, EmailVerificationSerializer
 from .models import UserElementryData
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
 from django.urls import reverse
 from django.core.mail import send_mail
 from .utils import send_email
@@ -41,20 +41,23 @@ def register_phase_one(request):
     return Response(user_data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET'])
-def verify_email(request):
-    token = request.GET.get('token')
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY)
-        user=UserElementryData.objects.get(id=payload['user_id'])
-        if not user.is_verified:
-            user.is_verified = True
-            user.save()
+class VerifyEmail(views.APIView):
+    serializer_class = EmailVerificationSerializer
 
-        return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
+    def get(self, request):
+        serializers
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY)
+            user=UserElementryData.objects.get(id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
 
-    except jwt.ExpiredSignatureError:
-        return Response({'error': 'Acctivition Expired'}, status=status.HTTP_400_BAD_REQUEST)
-    except jwt.exceptions.DecodeError:
-        return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
+
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Acctivition Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError:
+            return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
         
