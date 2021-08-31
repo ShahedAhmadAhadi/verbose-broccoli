@@ -86,9 +86,10 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=2),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    # 'REFRESH_TOKEN_LIFETIME': timedelta(minutes=2),
     'AUTH_HEADER_TYPES': ('B',),
+    'ALGORITHM': 'HS512'
 }
 
 WSGI_APPLICATION = "twitter.wsgi.application"

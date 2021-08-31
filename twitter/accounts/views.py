@@ -45,14 +45,18 @@ class VerifyEmail(views.APIView):
     serializer_class = EmailVerificationSerializer
 
     def get(self, request):
-        serializers
+        
         token = request.GET.get('token')
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms='HS512')
+        #  settings.SECRET_KEY)
+        print(token, payload)
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY)
-            user=UserElementryData.objects.get(id=payload['user_id'])
-            if not user.is_verified:
-                user.is_verified = True
-                user.save()
+            # payload = jwt.decode(token, settings.SECRET_KEY)
+            # print(payload)
+            # user=UserElementryData.objects.get(id=payload['user_id'])
+            # if not user.is_verified:
+            #     user.is_verified = True
+            #     user.save()
 
             return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
 

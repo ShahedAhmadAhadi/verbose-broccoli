@@ -1,4 +1,5 @@
 from enum import unique
+from django.db.models import fields
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserElementryData
@@ -37,5 +38,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ["first_name", "last_name", "email"]
 
 
-class EmailVerificationSerializer(serializers.Serializer):
+class EmailVerificationSerializer(serializers.ModelSerializer):
     token = serializers.CharField(max_length=1000)
+
+    class Meta:
+        model = User
+        fields = ['token']
+
