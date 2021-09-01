@@ -1,3 +1,4 @@
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from rest_framework import serializers, status
 from rest_framework import views
@@ -55,10 +56,16 @@ class VerifyEmail(views.APIView):
                 user.is_verified = True
                 user.save()
 
-            return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
+            return HttpResponseRedirect('accounts/register')
 
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Acctivition Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def register_phase_two(request):
+    if request.method == 'GET':
+        return Response({'success':'second_phase'})
+
         
