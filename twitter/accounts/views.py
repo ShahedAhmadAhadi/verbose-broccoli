@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import serializers, status
 from rest_framework import views
 from rest_framework.response import Response
-from .serializers import UserElementryDataSerializer, EmailVerificationSerializer
+from .serializers import RegisterSerializer, UserElementryDataSerializer, EmailVerificationSerializer
 from .models import UserElementryData
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
@@ -49,8 +49,9 @@ class VerifyEmail(views.APIView):
         token = request.GET.get('token')
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms='HS512')
-            print(payload)
+            print(payload, 'payload')
             user=UserElementryData.objects.get(id=payload['user_id'])
+            print(user)
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
@@ -65,6 +66,13 @@ class VerifyEmail(views.APIView):
 @api_view(['POST'])
 def register_phase_two(request):
     data = request.data
-    
+    serializer = RegisterSerializer(data=data)
+    serializer.is_valid(raise_exception=True)
+
+    print(data)
+    user_data = serializer.data
+    return Response(user_data, status=status.HTTP_201_CREATED)
+
+
 
         
