@@ -9,7 +9,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.decorators import api_view
 from django.urls import reverse
-from django.core.mail import send_mail
 from .utils import send_email
 from django.conf import settings
 import jwt
@@ -56,16 +55,16 @@ class VerifyEmail(views.APIView):
                 user.is_verified = True
                 user.save()
 
-            return HttpResponseRedirect('accounts/register')
+            return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
 
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Acctivition Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError:
             return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def register_phase_two(request):
-    if request.method == 'GET':
-        return Response({'success':'second_phase'})
+    data = request.data
+    
 
         

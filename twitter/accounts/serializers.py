@@ -32,16 +32,14 @@ class UserElementryDataSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=64, min_length=8, write_only=True)
+    username = serializers.CharField(max_length=64, min_length=5)
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email"]
+        fields = ["first_name", "last_name", "email", 'username', 'password', 'date_joined']
 
 
-class EmailVerificationSerializer(serializers.ModelSerializer):
+class EmailVerificationSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=1000)
 
-    class Meta:
-        model = User
-        fields = ['token']
 
