@@ -66,6 +66,7 @@ class VerifyEmail(views.APIView):
 @api_view(['POST'])
 def register_phase_two(request):
     data = request.data
+    if request.data[]
     serializer = RegisterSerializer(data=data)
     serializer.is_valid(raise_exception=True)
 
