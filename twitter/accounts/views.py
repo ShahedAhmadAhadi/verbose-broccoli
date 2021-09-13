@@ -1,5 +1,5 @@
 from django.http.response import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from rest_framework import serializers, status
 from rest_framework import views
 from rest_framework.response import Response
@@ -51,12 +51,12 @@ class VerifyEmail(views.APIView):
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms='HS512')
             print(payload, 'payload')
             user=UserElementryData.objects.get(id=payload['user_id'])
-            print(user)
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
 
-            return Response({'email': 'Successfully_activated'}, status=status.HTTP_200_OK)
+            return Response({'email': 'Successfully_activated?'+str(user)}, status=status.HTTP_200_OK)
+            # return HttpResponseRedirect(redirect_to='http://localhost:3000?token='+token)
 
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Acctivition Expired'}, status=status.HTTP_400_BAD_REQUEST)
@@ -65,8 +65,11 @@ class VerifyEmail(views.APIView):
 
 @api_view(['POST'])
 def register_phase_two(request):
+    try:
+        return
+    except:
+        return 
     data = request.data
-    if request.data[]
     serializer = RegisterSerializer(data=data)
     serializer.is_valid(raise_exception=True)
 
