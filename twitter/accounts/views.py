@@ -54,7 +54,7 @@ class VerifyEmail(views.APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-
+ 
             return Response({'email': 'Successfully_activated?'+str(user)}, status=status.HTTP_200_OK)
             # return HttpResponseRedirect(redirect_to='http://localhost:3000?token='+token)
 
@@ -66,7 +66,24 @@ class VerifyEmail(views.APIView):
 @api_view(['POST'])
 def register_phase_two(request):
     try:
-        return
+        token = request.GET.get('token')
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms='HS512')
+        email_data=UserElementryData.objects.get(id=payload['user_id'])
+        if email_data.is_verified:
+            data = request.data
+            data['email'] = email_data.email
+            data['first_name'] = email_data.first_name
+            data['last_name'] = email_data.last_name
+            serializer = RegisterSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            user_data = serializer.data
+            return Response(user_data, status=status.HTTP_201_CREATED)
+        return Response({'email': 'Email_not_verified'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+        
+        
     except:
         return 
     data = request.data
