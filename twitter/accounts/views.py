@@ -12,11 +12,20 @@ from django.urls import reverse
 from .utils import send_email
 from django.conf import settings
 import jwt
+from django.contrib.auth.models import User
 
 # Create your views here.
 @api_view(["POST"])
 def register_phase_one(request):
     data = request.data
+
+    if UserElementryData.objects.filter(data.email):
+        return Response({'email': 'already_have_account_login'}, status=status.HTTP_409_CONFLICT)        
+
+    if User.objects.filter(data.email):
+        return Response({'email': 'already_have_account_login'}, status=status.HTTP_409_CONFLICT)
+
+
     serializer = UserElementryDataSerializer(data=data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -74,6 +83,10 @@ def register_phase_two(request):
             data['email'] = email_data.email
             data['first_name'] = email_data.first_name
             data['last_name'] = email_data.last_name
+            
+            if User.objects.filter(username=data.username):
+                return Response({'username': 'choose_another_username'}, status=status.HTTP_409_CONFLICT)
+
             serializer = RegisterSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
