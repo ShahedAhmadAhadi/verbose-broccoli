@@ -30,13 +30,17 @@ class UserElementryDataSerializer(serializers.Serializer):
         return UserElementryData.objects.create(**validated_data)
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=64, min_length=8, write_only=True)
     username = serializers.CharField(max_length=64, min_length=5)
+    first_name = serializers.CharField(min_length=3, max_length=16)
+    last_name = serializers.CharField(min_length=3, max_length=16)
+    email = serializers.EmailField()
 
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name", "email", 'username', 'password']
+    def validate_username(self, value):
+        for i in value:
+            if not 65 <= ord(i) <= 90 or 97 <= ord(i) <= 122 or ord(i) == 95 or ord(i) == 36:
+                raise serializers.ValidationError('The username should only contain [a-z], [A-Z], [1-9], $, _')          
 
 
 class EmailVerificationSerializer(serializers.Serializer):

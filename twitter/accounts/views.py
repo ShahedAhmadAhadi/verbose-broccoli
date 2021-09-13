@@ -76,6 +76,7 @@ def register_phase_two(request):
             data['last_name'] = email_data.last_name
             serializer = RegisterSerializer(data=data)
             serializer.is_valid(raise_exception=True)
+            serializer.save()
             user_data = serializer.data
             return Response(user_data, status=status.HTTP_201_CREATED)
         return Response({'email': 'Email_not_verified'}, status=status.HTTP_400_BAD_REQUEST)
