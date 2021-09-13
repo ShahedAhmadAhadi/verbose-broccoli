@@ -19,10 +19,10 @@ from django.contrib.auth.models import User
 def register_phase_one(request):
     data = request.data
 
-    if UserElementryData.objects.filter(data.email):
-        return Response({'email': 'already_have_account_login'}, status=status.HTTP_409_CONFLICT)        
+    if UserElementryData.objects.filter(email= data.email):
+        return Response({'email': 'send_again_verify_info'}, status=status.HTTP_409_CONFLICT)        
 
-    if User.objects.filter(data.email):
+    if User.objects.filter(email = data.email):
         return Response({'email': 'already_have_account_login'}, status=status.HTTP_409_CONFLICT)
 
 
@@ -90,6 +90,9 @@ def register_phase_two(request):
             serializer = RegisterSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+
+            email_data.delete()
+
             user_data = serializer.data
             return Response(user_data, status=status.HTTP_201_CREATED)
         return Response({'email': 'Email_not_verified'}, status=status.HTTP_400_BAD_REQUEST)
