@@ -16,7 +16,8 @@ class UserElementryData(models.Model):
 
 
 class UserVerificationInfo(models.Model):
-    email = models.ForeignKey(UserElementryData.email, on_delete=models.CASCADE)
+    email = models.OneToOneField(UserElementryData, on_delete=models.CASCADE)
     email_requests = models.IntegerField(default=1)
-    
+
+
 

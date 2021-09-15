@@ -4,7 +4,7 @@ from rest_framework import serializers, status
 from rest_framework import views
 from rest_framework.response import Response
 from .serializers import RegisterSerializer, UserElementryDataSerializer, EmailVerificationSerializer
-from .models import UserElementryData
+from .models import UserElementryData, UserVerificationInfo
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.decorators import api_view
@@ -16,9 +16,9 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 
-def sending_verification_again(request):
+def sending_verification_again(data):
     try:
-        print('a')
+        return
     except:
         return
 
@@ -36,6 +36,8 @@ def register_phase_one(request):
         serializer = UserElementryDataSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        # UserVerificationInfo.objects.create()
 
         user_data = serializer.data
 
