@@ -15,6 +15,13 @@ import jwt, socket
 from django.contrib.auth.models import User
 
 # Create your views here.
+
+def sending_verification_again(request):
+    try:
+        print('a')
+    except:
+        return
+
 @api_view(["POST"])
 def register_phase_one(request):
     data = request.data
@@ -104,4 +111,5 @@ def register_phase_two(request):
     except jwt.exceptions.DecodeError:
         return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
 
-        
+
+

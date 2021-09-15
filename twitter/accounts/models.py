@@ -14,3 +14,9 @@ class UserElementryData(models.Model):
     def __str__(self):
         return self.email
 
+
+class UserVerificationInfo(models.Model):
+    email = models.ForeignKey(UserElementryData.email, on_delete=models.CASCADE)
+    email_requests = models.IntegerField(default=1)
+    
+
