@@ -19,11 +19,13 @@ from django.contrib.auth.models import User
 def register_phase_one(request):
     data = request.data
 
-    if UserElementryData.objects.filter(email= data.email):
+    if UserElementryData.objects.filter(email= data['email']):
         return Response({'email': 'send_again_verify_info'}, status=status.HTTP_409_CONFLICT)        
 
-    if User.objects.filter(email = data.email):
+    if User.objects.filter(email = data['email']):
         return Response({'email': 'already_have_account_login'}, status=status.HTTP_409_CONFLICT)
+
+    print(data)
 
 
     serializer = UserElementryDataSerializer(data=data)
@@ -84,7 +86,7 @@ def register_phase_two(request):
             data['first_name'] = email_data.first_name
             data['last_name'] = email_data.last_name
             
-            if User.objects.filter(username=data.username):
+            if User.objects.filter(username=data['username']):
                 return Response({'username': 'choose_another_username'}, status=status.HTTP_409_CONFLICT)
 
             serializer = RegisterSerializer(data=data)

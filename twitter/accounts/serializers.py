@@ -39,8 +39,16 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate_username(self, value):
         for i in value:
-            if not 65 <= ord(i) <= 90 or 97 <= ord(i) <= 122 or ord(i) == 95 or ord(i) == 36:
-                raise serializers.ValidationError('The username should only contain [a-z], [A-Z], [1-9], $, _')          
+            print(ord(i))
+            if 64 < ord(i) < 91 or 96 < ord(i) < 123 or ord(i) == 95 or ord(i) == 36 or 47 < ord(i) < 58:
+                pass
+            else:
+                raise serializers.ValidationError('The username should only contain [a-z], [A-Z], [1-9], $, _')
+
+        return value
+
+    def create(self, validated_data):
+        return User.objects.create(**validated_data)
 
 
 class EmailVerificationSerializer(serializers.Serializer):
