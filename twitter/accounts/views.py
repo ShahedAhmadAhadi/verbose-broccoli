@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 from django.urls import reverse
 from .utils import send_email
 from django.conf import settings
-import jwt
+import jwt, socket
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -25,31 +25,31 @@ def register_phase_one(request):
     if User.objects.filter(email = data['email']):
         return Response({'email': 'already_have_account_login'}, status=status.HTTP_409_CONFLICT)
 
-    print(data)
+    try:
+        serializer = UserElementryDataSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        user_data = serializer.data
+
+        email = UserElementryData.objects.get(email=user_data['email'])
+        token = RefreshToken.for_user(email).access_token
 
 
-    serializer = UserElementryDataSerializer(data=data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
+        current_site = get_current_site(request).domain
+        relative_link = reverse('verify_email')
 
-    user_data = serializer.data
+        absolute_url = 'http://'+current_site+relative_link+"?token="+str(token)
+        email_body = 'Hi! '+email.first_name+' '+email.last_name+' Use the link below to verify your email \n'+absolute_url
 
-    email = UserElementryData.objects.get(email=user_data['email'])
-    token = RefreshToken.for_user(email).access_token
+        data = {'email_subject': 'Verify you E-mail', 'email_body': email_body, 'email_to':email.email}
 
-
-    current_site = get_current_site(request).domain
-    relative_link = reverse('verify_email')
-
-    absolute_url = 'http://'+current_site+relative_link+"?token="+str(token)
-    email_body = 'Hi! '+email.first_name+' '+email.last_name+' Use the link below to verify your email \n'+absolute_url
-
-    data = {'email_subject': 'Verify you E-mail', 'email_body': email_body, 'email_to':email.email}
-
-    send_email(data)
+        send_email(data)
 
 
-    return Response(user_data, status=status.HTTP_201_CREATED)
+        return Response(user_data, status=status.HTTP_201_CREATED)
+    except socket.gaierror:
+        return Response({'error': 'server_error_email_can_not_be_send'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyEmail(views.APIView):

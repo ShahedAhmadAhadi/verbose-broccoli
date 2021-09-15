@@ -39,7 +39,6 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate_username(self, value):
         for i in value:
-            print(ord(i))
             if 64 < ord(i) < 91 or 96 < ord(i) < 123 or ord(i) == 95 or ord(i) == 36 or 47 < ord(i) < 58:
                 pass
             else:
