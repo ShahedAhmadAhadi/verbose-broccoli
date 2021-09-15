@@ -17,16 +17,17 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 def sending_verification_again(data):
-    try:
-        return
-    except:
-        return
+    # user_data = UserElementryData.objects.filter(email = data['email'])
+    user_verification_info = UserVerificationInfo.objects.get(email = UserElementryData.objects.get(email = data['email']))
+    user_verification_info.email_requests = user_verification_info.email_requests + 1
+    user_verification_info.save()
 
 @api_view(["POST"])
 def register_phase_one(request):
     data = request.data
 
     if UserElementryData.objects.filter(email= data['email']):
+        sending_verification_again(data)
         return Response({'email': 'send_again_verify_info'}, status=status.HTTP_409_CONFLICT)        
 
     if User.objects.filter(email = data['email']):
@@ -37,28 +38,30 @@ def register_phase_one(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        # UserVerificationInfo.objects.create()
-
         user_data = serializer.data
 
-        email = UserElementryData.objects.get(email=user_data['email'])
-        token = RefreshToken.for_user(email).access_token
+        UserVerificationInfo.objects.create(email = UserElementryData.objects.get(email=user_data['email']))
 
-
-        current_site = get_current_site(request).domain
-        relative_link = reverse('verify_email')
-
-        absolute_url = 'http://'+current_site+relative_link+"?token="+str(token)
-        email_body = 'Hi! '+email.first_name+' '+email.last_name+' Use the link below to verify your email \n'+absolute_url
-
-        data = {'email_subject': 'Verify you E-mail', 'email_body': email_body, 'email_to':email.email}
-
-        send_email(data)
-
+        sending_email(request, UserElementryData, user_data)
 
         return Response(user_data, status=status.HTTP_201_CREATED)
     except socket.gaierror:
         return Response({'error': 'server_error_email_can_not_be_send'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def sending_email(request, model, serializer_data):
+    email = model.objects.get(email=serializer_data['email'])
+    token = RefreshToken.for_user(email).access_token
+
+
+    current_site = get_current_site(request).domain
+    relative_link = reverse('verify_email')
+
+    absolute_url = 'http://'+current_site+relative_link+"?token="+str(token)
+    email_body = 'Hi! '+email.first_name+' '+email.last_name+' Use the link below to verify your email \n'+absolute_url
+
+    data = {'email_subject': 'Verify you E-mail', 'email_body': email_body, 'email_to':email.email}
+
+    send_email(data)
 
 
 class VerifyEmail(views.APIView):

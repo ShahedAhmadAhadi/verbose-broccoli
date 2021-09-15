@@ -19,5 +19,8 @@ class UserVerificationInfo(models.Model):
     email = models.OneToOneField(UserElementryData, on_delete=models.CASCADE)
     email_requests = models.IntegerField(default=1)
 
+    def __str__(self):
+        return str(self.email)
+
 
 
