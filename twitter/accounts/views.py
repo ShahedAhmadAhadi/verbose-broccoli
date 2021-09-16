@@ -16,18 +16,22 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 
-def sending_verification_again(data):
+def sending_verification_again(request):
+    data = request.data
     # user_data = UserElementryData.objects.filter(email = data['email'])
     user_verification_info = UserVerificationInfo.objects.get(email = UserElementryData.objects.get(email = data['email']))
     user_verification_info.email_requests = user_verification_info.email_requests + 1
     user_verification_info.save()
+    serializer = UserElementryDataSerializer(data=data)
+    serializer.is_valid()
+    sending_email(request, UserElementryData, serializer.data)
 
 @api_view(["POST"])
 def register_phase_one(request):
     data = request.data
 
     if UserElementryData.objects.filter(email= data['email']):
-        sending_verification_again(data)
+        sending_verification_again(request)
         return Response({'email': 'send_again_verify_info'}, status=status.HTTP_409_CONFLICT)        
 
     if User.objects.filter(email = data['email']):
