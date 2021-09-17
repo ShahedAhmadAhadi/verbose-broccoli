@@ -12,25 +12,24 @@ from django.urls import reverse
 from .utils import send_email
 from django.conf import settings
 import jwt, socket
+from datetime import datetime, timedelta ,timezone, tzinfo
 from django.contrib.auth.models import User
 
 # Create your views here.
 
 def sending_verification_again(request):
-
     data = request.data
 
-    user_verification_info = UserVerificationInfo.objects.get(email = UserElementryData.objects.get(email = data['email']))
+    user_data = UserElementryData.objects.get(email = data['email'])
+    user_verification_info = UserVerificationInfo.objects.get(email = user_data)
     user_verification_info.email_requests = user_verification_info.email_requests + 1
     user_verification_info.save()
     try:
-        if user_verification_info.email_requests > 5:
+        time_delta = datetime.now(tzinfo=timezone.utc) - user_data.created_at 
+        if user_verification_info.email_requests > 5 and time_delta < timedelta(minutes = 50):
             return Response({'too_many': 'too_many_requests_please_try_again_later'})
         # user_data = UserElementryData.objects.filter(email = data['email'])
-        
-        serializer = UserElementryDataSerializer(data=data)
-        serializer.is_valid()
-        sending_email(request, UserElementryData, serializer.data)
+        sending_email(request, UserElementryData, user_verification_info.email)
         return Response({'email': 'sent_email'})
     except:
         return Response({'error': 'error_sending_email_please_try_later'})
@@ -42,7 +41,7 @@ def register_phase_one(request):
     data = request.data
 
     if UserElementryData.objects.filter(email= data['email']):
-        sending_verification_again(request)
+        return sending_verification_again(request)
         # return Response({'email': 'send_again_verify_info'}, status=status.HTTP_409_CONFLICT)        
 
     if User.objects.filter(email = data['email']):
@@ -57,14 +56,14 @@ def register_phase_one(request):
 
         UserVerificationInfo.objects.create(email = UserElementryData.objects.get(email=user_data['email']))
 
-        sending_email(request, UserElementryData, user_data)
+        sending_email(request, UserElementryData, user_data['email'])
 
         return Response(user_data, status=status.HTTP_201_CREATED)
     except socket.gaierror:
         return Response({'error': 'server_error_email_can_not_be_send'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-def sending_email(request, model, serializer_data):
-    email = model.objects.get(email=serializer_data['email'])
+def sending_email(request, model, email):
+    email = model.objects.get(email=email)
     token = RefreshToken.for_user(email).access_token
 
 
