@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "tweet.apps.TweetConfig",
     "accounts.apps.AccountsConfig",
     "rest_framework_simplejwt",
+    "user_info.apps.UserInfoConfig",
 ]
 
 MIDDLEWARE = [
