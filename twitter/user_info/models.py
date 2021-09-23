@@ -16,4 +16,4 @@ class UserInfo(models.Model):
     image = models.ImageField(upload_to='userImages')
 
     def __str__(self) -> str:
-        return self.user
+        return self.user.username
