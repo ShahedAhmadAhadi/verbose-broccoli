@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import add_user_info
+from .views import add_user_info, user_info
+
 
 urlpatterns = [
-    path('add/', add_user_info)
+    path('add/', add_user_info),
+    path('user-info/<int:id>/', user_info)
 ]

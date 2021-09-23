@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from tweet import views as tweet_view
 from rest_framework import permissions
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,4 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('demo/', tweet_view.DemoView.as_view()),
     path('user/', include('user_info.urls'))
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
