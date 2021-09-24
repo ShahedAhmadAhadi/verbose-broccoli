@@ -6,3 +6,5 @@ class UserInfoSerializer(serializers.Serializer):
     gender = serializers.CharField()
     about = serializers.CharField(max_length=255)
     image = serializers.ImageField()
+
+    
