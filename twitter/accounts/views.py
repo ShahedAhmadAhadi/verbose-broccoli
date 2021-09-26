@@ -126,12 +126,14 @@ def register_phase_two(request):
             refresh = serializer.validated_data.get("refresh", None)
             username = serializer.validated_data.get("username", None)
 
-            if access is not None:
-                response = Response({'access_token': access, "refresh": refresh, "username", username})
-
             email_data.delete()
 
             user_data = serializer.data
+
+            if access is not None:
+                Response({'access_token': access, "refresh": refresh, "username": username, "user_data": user_data}, status= status.HTTP_201_CREATED)
+
+            
 
             return Response(user_data, status=status.HTTP_201_CREATED)
         return Response({'email': 'Email_not_verified'}, status=status.HTTP_400_BAD_REQUEST)
