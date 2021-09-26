@@ -131,7 +131,11 @@ def register_phase_two(request):
             user_data = serializer.data
 
             if access is not None:
-                Response({'access_token': access, "refresh": refresh, "username": username, "user_data": user_data}, status= status.HTTP_201_CREATED)
+                response = Response({'access_token': access, "refresh": refresh, "username": username, "user_data": user_data}, status= status.HTTP_201_CREATED)
+                response.set_cookie('token', access, httponly=True)
+                response.set_cookie('refresh', refresh, httponly=True)
+                response.set_cookie('username', username, httponly=True)
+                return response
 
             
 
