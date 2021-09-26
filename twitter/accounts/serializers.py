@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserElementryData
 from rest_framework.parsers import JSONParser
+from rest_framework_simplejwt.views import token_obtain_pair
 
 
 def duplicate_email():
@@ -37,6 +38,7 @@ class RegisterSerializer(serializers.Serializer):
     last_name = serializers.CharField(min_length=3, max_length=16)
     email = serializers.EmailField()
 
+
     def validate_username(self, value):
         for i in value:
             if 64 < ord(i) < 91 or 96 < ord(i) < 123 or ord(i) == 95 or ord(i) == 36 or 47 < ord(i) < 58:
@@ -46,12 +48,17 @@ class RegisterSerializer(serializers.Serializer):
 
         return value
 
+    def get_token(user):
+        token = token_obtain_pair(user= user)
+        return token
+
     def validate(self, attrs):
+        print(self['username'])
         data = super().validate(attrs)
-        refresh = self.get_token(self.username)
-        data["refresh"] = str(refresh)
-        data["access"] = str(refresh.access_token)
-        data["username"] = self.username
+        # refresh = self.get_token(self.username)
+        # data["refresh"] = str(refresh)
+        # data["access"] = str(refresh.access_token)
+        # data["username"] = self.username
 
         return data
 

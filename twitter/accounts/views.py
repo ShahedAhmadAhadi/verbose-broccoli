@@ -26,11 +26,11 @@ def sending_verification_again(request):
     user_verification_info.email_requests = user_verification_info.email_requests + 1
     user_verification_info.save()
     try:
-        time_delta = datetime.now(tzinfo=timezone.utc) - user_data.created_at 
-        turn = user_verification_info.email_requests % 5 == 0 
-        time_to_request_again = pow(user_verification_info.email_request / 5, 2) * 50
-        if turn and time_delta < timedelta(minutes = time_to_request_again):
-            return Response({'too_many': 'too_many_requests_please_try_again_later'})
+        # time_delta = datetime.now(tzinfo=timezone.utc) - user_data.created_at 
+        # turn = user_verification_info.email_requests % 5 == 0 
+        # time_to_request_again = pow(user_verification_info.email_request / 5, 2) * 50
+        # if turn and time_delta < timedelta(minutes = time_to_request_again):
+        #     return Response({'too_many': 'too_many_requests_please_try_again_later'})
         # user_data = UserElementryData.objects.filter(email = data['email'])
         sending_email(request, UserElementryData, user_verification_info.email)
         return Response({'email': 'sent_email'})
@@ -126,7 +126,7 @@ def register_phase_two(request):
             refresh = serializer.validated_data.get("refresh", None)
             username = serializer.validated_data.get("username", None)
 
-            email_data.delete()
+            # email_data.delete()
 
             user_data = serializer.data
 
@@ -137,9 +137,8 @@ def register_phase_two(request):
                 response.set_cookie('username', username, httponly=True)
                 return response
 
-            
+            return Response({'error': 'something_went_wrong__try_again!'}, status=status.HTTP_201_CREATED)
 
-            return Response(user_data, status=status.HTTP_201_CREATED)
         return Response({'email': 'Email_not_verified'}, status=status.HTTP_400_BAD_REQUEST)
 
     except jwt.ExpiredSignatureError:
