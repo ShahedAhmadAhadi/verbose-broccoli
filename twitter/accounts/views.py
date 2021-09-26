@@ -15,6 +15,7 @@ from django.conf import settings
 import jwt, socket
 from datetime import datetime, timedelta ,timezone, tzinfo
 from django.contrib.auth.models import User
+from rest_framework_simplejwt.views import token_obtain_pair
 
 # Create your views here.
 
@@ -122,13 +123,19 @@ def register_phase_two(request):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
-            access = serializer.validated_data.get("access", None)
-            refresh = serializer.validated_data.get("refresh", None)
-            username = serializer.validated_data.get("username", None)
+            user_data = serializer.data
+
+            
+
+            data_token = additional_data(request)
+            print(data_token)
+            # access = serializer.validated_data.get("access", None)
+            # refresh = serializer.validated_data.get("refresh", None)
+            # username = serializer.validated_data.get("username", None)
 
             # email_data.delete()
 
-            user_data = serializer.data
+            
 
             if access is not None:
                 response = Response({'access_token': access, "refresh": refresh, "username": username, "user_data": user_data}, status= status.HTTP_201_CREATED)
