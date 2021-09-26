@@ -46,6 +46,15 @@ class RegisterSerializer(serializers.Serializer):
 
         return value
 
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = self.get_token(self.username)
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+        data["username"] = self.username
+
+        return data
+
     def create(self, validated_data):
         return User.objects.create(**validated_data)
 

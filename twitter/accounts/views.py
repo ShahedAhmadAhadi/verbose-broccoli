@@ -2,6 +2,7 @@ from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from rest_framework import serializers, status
 from rest_framework import views
+from rest_framework import response
 from rest_framework.response import Response
 from .serializers import RegisterSerializer, UserElementryDataSerializer, EmailVerificationSerializer
 from .models import UserElementryData, UserVerificationInfo
@@ -121,9 +122,17 @@ def register_phase_two(request):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
+            access = serializer.validated_data.get("access", None)
+            refresh = serializer.validated_data.get("refresh", None)
+            username = serializer.validated_data.get("username", None)
+
+            if access is not None:
+                response = Response({'access_token': access, "refresh": refresh, "username", username})
+
             email_data.delete()
 
             user_data = serializer.data
+
             return Response(user_data, status=status.HTTP_201_CREATED)
         return Response({'email': 'Email_not_verified'}, status=status.HTTP_400_BAD_REQUEST)
 
