@@ -26,14 +26,16 @@ def sending_verification_again(request):
     user_verification_info = UserVerificationInfo.objects.get(email = user_data)
     user_verification_info.email_requests = user_verification_info.email_requests + 1
     user_verification_info.save()
+    print(user_data)
     try:
-        # time_delta = datetime.now(tzinfo=timezone.utc) - user_data.created_at 
-        # turn = user_verification_info.email_requests % 5 == 0 
-        # time_to_request_again = pow(user_verification_info.email_request / 5, 2) * 50
-        # if turn and time_delta < timedelta(minutes = time_to_request_again):
-        #     return Response({'too_many': 'too_many_requests_please_try_again_later'})
-        # user_data = UserElementryData.objects.filter(email = data['email'])
-        sending_email(request, UserElementryData, user_verification_info.email)
+        time_delta = datetime.now(tz=timezone.utc) - user_data.created_at
+        turn = user_verification_info.email_requests % 5 == 0
+        time_to_request_again = pow(user_verification_info.email_requests / 5, 2) * 50
+        print(turn or time_delta < timedelta(minutes = time_to_request_again))
+        if turn or time_delta < timedelta(minutes = time_to_request_again):
+            return Response({'too_many': 'too_many_requests_please_try_again_later'})
+        user_data = UserElementryData.objects.filter(email = data['email'])
+        # sending_email(request, UserElementryData, user_verification_info.email)
         return Response({'email': 'sent_email'})
     except:
         return Response({'error': 'error_sending_email_please_try_later'})
