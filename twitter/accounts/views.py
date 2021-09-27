@@ -33,9 +33,10 @@ def sending_verification_again(request):
         time_to_request_again = pow(user_verification_info.email_requests / 5, 2) * 50
         print(turn or time_delta < timedelta(minutes = time_to_request_again))
         if turn or time_delta < timedelta(minutes = time_to_request_again):
+            user_data = UserElementryData.objects.filter(email = data['email'])
+            sending_email(request, UserElementryData, user_verification_info.email)
             return Response({'too_many': 'too_many_requests_please_try_again_later'})
-        user_data = UserElementryData.objects.filter(email = data['email'])
-        # sending_email(request, UserElementryData, user_verification_info.email)
+        
         return Response({'email': 'sent_email'})
     except:
         return Response({'error': 'error_sending_email_please_try_later'})
