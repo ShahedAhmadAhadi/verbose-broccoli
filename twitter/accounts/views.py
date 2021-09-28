@@ -219,11 +219,18 @@ def register_phase_two(request):
 
 @api_view(["POST"])
 def prac(request):
-    data = request.headers.get("token")
+    data = request.data
+    access_token = request.headers.get("token")
+    key = settings.SECRET_KEY
+
+    payload = jwt.decode(access_token, key, algorithms=["HS512"])
+
+    user = User.objects.filter(id= payload["user_id"])
+    print(user)
     # ["access_token"]
     # ["HTTP_COOKIE"]
     # for i in data: 
     #     print(i)
-    print(data)
+    # print(data)
     return Response({'result': 'done'})
 
