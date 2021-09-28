@@ -2,7 +2,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import register_phase_one, VerifyEmail, register_phase_two
+from .views import prac, register_phase_one, VerifyEmail, register_phase_two
 from django.urls import path
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     path("registerE/", register_phase_one),
     path('email-verify', VerifyEmail.as_view(), name='verify_email'),
     path('register/', register_phase_two),
+    path('prac/', prac)
 ]

@@ -215,3 +215,10 @@ def register_phase_two(request):
         )
     except jwt.exceptions.DecodeError:
         return Response({"error": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+def prac(request):
+    print(request.META)
+    return Response({'result': 'done'})
+
