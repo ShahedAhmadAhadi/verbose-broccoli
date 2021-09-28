@@ -23,6 +23,16 @@ def user_info(request, id):
 @api_view(['POST'])
 def add_user_info(request, format=None):
     data = request.data
+    access_token = request.headers.get("token")
+    refresh_token = request.headers.get("refresh_token")
+
+    if access_token:
+        pass
+    else:
+        return Response({'Error': "NO token found"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+    payload = jwt.decode()
 
     serializer = UserInfoSerializer(data=data)
     serializer.is_valid(raise_exception=True)

@@ -219,6 +219,11 @@ def register_phase_two(request):
 
 @api_view(["POST"])
 def prac(request):
-    print(request.META)
+    data = request.headers.get("token")
+    # ["access_token"]
+    # ["HTTP_COOKIE"]
+    # for i in data: 
+    #     print(i)
+    print(data)
     return Response({'result': 'done'})
 
