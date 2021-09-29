@@ -1,11 +1,28 @@
 def cookie_value_to_dict(str):
     data = {}
 
-    semicolon_index = str.find(';')
-    if semicolon_index != -1:
-        dict = till_semicolon_str_to_dict(str[0: semicolon_index])
+    semicolon_indexex = [0]
+
+    for i in range(len(str)):
+        if str[i] == ';':
+            semicolon_indexex.append(i)
+
+    print(semicolon_indexex)
+
+    for i in range(1, len(semicolon_indexex)):
+        print(i)
+        dict = till_semicolon_str_to_dict(str[semicolon_indexex[i-1]: semicolon_indexex[i]])
         data.update(dict)
-        print(dict)
+    
+    print(data)
+    
+    # print(str[0: semicolon_indexex[0]])
+    # print(semicolon_indexex)
+
+    # if semicolon_index != -1:
+    #     dict = till_semicolon_str_to_dict(str[0: semicolon_index])
+    #     data.update(dict)
+    #     print(dict)
         
 
     return None
