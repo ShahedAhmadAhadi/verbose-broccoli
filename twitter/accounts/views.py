@@ -220,8 +220,11 @@ def register_phase_two(request):
 @api_view(["POST"])
 def prac(request):
     data = request.data
-    access_token = request.headers.get("token")
+    access_token = request.META.get("HTTP_COOKIE")
+    refresh_token = request.headers.get("refresh")
     key = settings.SECRET_KEY
+    print((access_token))
+    return Response(key)
     try:
         
         payload = jwt.decode(access_token, key, algorithms=["HS512"])
@@ -232,9 +235,9 @@ def prac(request):
         # ["HTTP_COOKIE"]
         # for i in data: 
         #     print(i)
-        # print(data)
         return Response({'result': 'done'})
     except jwt.ExpiredSignatureError:
-        
-        return Response({'session': 'expired'})
+        payload = jwt.decode(refresh_token, key, algorithms=['HS512'])
+        user = User.objects.filter(id = payload["user_id"])
+        return Response(user[0].username)
 

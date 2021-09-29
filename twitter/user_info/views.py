@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core import exceptions
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
+from rest_framework import response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -25,8 +26,9 @@ def user_info(request, id):
 @api_view(['POST'])
 def add_user_info(request, format=None):
     data = request.data
-    access_token = request.headers.get("token")
+    access_token = request.META.get("HTTP_COOKIE")
     refresh_token = request.headers.get("refresh_token")
+    return Response(access_token)
 
     if access_token:
         key = settings.SECRET_KEY
