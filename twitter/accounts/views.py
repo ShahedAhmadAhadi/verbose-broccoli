@@ -223,7 +223,7 @@ def prac(request):
     access_token = request.META.get("HTTP_COOKIE")
     refresh_token = request.headers.get("refresh")
     key = settings.SECRET_KEY
-    print((access_token))
+    print((access_token.get('token')))
     return Response(key)
     try:
         
