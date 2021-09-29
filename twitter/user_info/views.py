@@ -32,21 +32,24 @@ def add_user_info(request, format=None):
         key = settings.SECRET_KEY
     else:
         return Response({'Error': "NO token found"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    try:
+        payload = jwt.decode(access_token, key, algorithms=["HS512"])
+        print(payload)
 
+        user = User.objects.filter(id= payload["user_id"])
 
-    payload = jwt.decode(access_token, key, algorithms=["HS512"])
-    print(payload)
+        data["user"] = user[0].id
+        print(user[0].id)
 
-    user = User.objects.filter(id= payload["user_id"])
+        serializer = UserInfoSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-    data["user"] = user[0].id
-    print(user[0].id)
+        user_info = serializer.data
 
-    serializer = UserInfoSerializer(data=data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
+        return Response(user_info, status=status.HTTP_201_CREATED)
 
-    user_info = serializer.data
-
-    return Response(user_info, status=status.HTTP_201_CREATED)
+    except jwt.ExpiredSignatureError:
+        pass
 

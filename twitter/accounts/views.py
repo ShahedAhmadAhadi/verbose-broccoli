@@ -222,15 +222,19 @@ def prac(request):
     data = request.data
     access_token = request.headers.get("token")
     key = settings.SECRET_KEY
+    try:
+        
+        payload = jwt.decode(access_token, key, algorithms=["HS512"])
 
-    payload = jwt.decode(access_token, key, algorithms=["HS512"])
-
-    user = User.objects.filter(id= payload["user_id"])
-    print(user)
-    # ["access_token"]
-    # ["HTTP_COOKIE"]
-    # for i in data: 
-    #     print(i)
-    # print(data)
-    return Response({'result': 'done'})
+        user = User.objects.filter(id= payload["user_id"])
+        print(user)
+        # ["access_token"]
+        # ["HTTP_COOKIE"]
+        # for i in data: 
+        #     print(i)
+        # print(data)
+        return Response({'result': 'done'})
+    except jwt.ExpiredSignatureError:
+        
+        return Response({'session': 'expired'})
 
