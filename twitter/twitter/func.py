@@ -1,20 +1,24 @@
 def cookie_value_to_dict(str):
     data = {}
 
-    semicolon_indexex = [0]
+    # semicolon_indexex = [0]
 
-    for i in range(len(str)):
-        if str[i] == ';':
-            semicolon_indexex.append(i)
+    cookie_key_value_units = str.split(';')
 
-    print(semicolon_indexex)
-
-    for i in range(1, len(semicolon_indexex)):
-        print(i)
-        dict = till_semicolon_str_to_dict(str[semicolon_indexex[i-1]: semicolon_indexex[i]])
+    for i in cookie_key_value_units:
+        dict = cookie_key_value_units_to_dict(i)
         data.update(dict)
     
     print(data)
+
+    # print(semicolon_indexex, str[256])
+
+    # for i in range(1, len(semicolon_indexex)):
+    #     print(i)
+    #     dict = till_semicolon_str_to_dict(str[semicolon_indexex[i-1]: semicolon_indexex[i]])
+    #     data.update(dict)
+    
+    # print(data)
     
     # print(str[0: semicolon_indexex[0]])
     # print(semicolon_indexex)
@@ -25,10 +29,12 @@ def cookie_value_to_dict(str):
     #     print(dict)
         
 
-    return None
+    return data
 
-def till_semicolon_str_to_dict(str):
+def cookie_key_value_units_to_dict(str):
     dict = {}
+
+    'str'.strip
 
     equal_index = str.find('=')
 
