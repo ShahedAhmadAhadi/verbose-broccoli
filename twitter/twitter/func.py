@@ -1,5 +1,5 @@
 # from django.conf import settings
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 # import jwt, requests, json
 
 
@@ -39,12 +39,12 @@ def cookie_value_to_dict(str):
 def cookie_key_value_units_to_dict(str):
     dict = {}
 
-    'str'.strip
+    strip_str = str.strip()
 
-    equal_index = str.find('=')
+    equal_index = strip_str.find('=')
 
-    key_in_str = str[0:equal_index]
-    value_in_str = str[equal_index+1:]
+    key_in_str = strip_str[0:equal_index]
+    value_in_str = strip_str[equal_index+1:]
 
     dict[key_in_str] = value_in_str
 
@@ -58,37 +58,37 @@ def previous_char_str(str):
 
 # cookie_value_to_str('sdlfjr')
 
-# def auth_user_tokens(dict):
-#     try:
+def auth_user_tokens(dict):
+    try:
             
-#         token = dict['token']
-#         refresh = dict['refresh']
-#         username = dict['username']
-#     except KeyError:
-#         return 'wrong_specs'
+        token = dict['token']
+        refresh = dict['refresh']
+        username = dict['username']
+    except KeyError:
+        return 'wrong_specs'
 
-#     key = settings.SECRET_KEY
+    key = settings.SECRET_KEY
     
-#     try:
+    try:
 
-#         payload = jwt.decode(token, key, algorithms=["HS512"])
-#         print(payload)
+        payload = jwt.decode(token, key, algorithms=["HS512"])
+        print(payload)
 
-#         user = User.objects.filter(id= payload["user_id"])
+        user = User.objects.filter(id= payload["user_id"])
 
-#         if user[0].username == username:
-#             print(user[0].id, user[0].username)
-#             return dict
-#         else:
-#             return 'wrong_username'
+        if user[0].username == username:
+            print(user[0].id, user[0].username)
+            return dict
+        else:
+            return 'wrong_username'
 
-#     except jwt.ExpiredSignatureError:
-#         print('expired: new token')
+    except jwt.ExpiredSignatureError:
+        print('expired: new token')
 
-#         url = 'http://127.0.0.1:8000/api/token/refresh/'
-#         data = {'refresh': refresh}
-#         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
-#         print(request)
+        url = 'http://127.0.0.1:8000/api/token/refresh/'
+        data = {'refresh': refresh}
+        request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
+        print(request)
 
 
 # auth_user_tokens("token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyODU4MjYyLCJqdGkiOiI3NTNkOTJmMjA1NGU0Y2I4OTVkYjgzZDIzMDQ1NjBhZCIsInVzZXJfaWQiOjI2fQ.19PnXIDLO4pp2lupWnpdSTPiqBdMK3AoqTLdYzYTyLhEFCEZ-ZiUulMawy6nmQA6xjpW-w3WG186AuuKYoFSpQ; refresh=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzMjkzNzQ2MiwianRpIjoiODY5OGI4OWQyZDZjNGJkMDk1M2U2N2YwNTMyZTI5ZTMiLCJ1c2VyX2lkIjoyNn0.aqWQah_7606mc0SMMbKHSym6O13WU4rsslcI8BbPHqCYM2QOk8OBHbWjhwQKnQdh6j_zZffpx_gpfMo9My2MvA; username=shahed")
