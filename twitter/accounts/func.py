@@ -1,6 +1,6 @@
-from django.conf import settings
+# from django.conf import settings
 from django.contrib.auth.models import User
-import jwt
+# import jwt, requests, json
 
 
 def cookie_value_to_dict(str):
@@ -58,21 +58,37 @@ def previous_char_str(str):
 
 # cookie_value_to_str('sdlfjr')
 
-def auth_user_tokens(dict):
-    token = dict['token']
-    refresh = dict['refresh']
-    username = dict['username']
+# def auth_user_tokens(dict):
+#     try:
+            
+#         token = dict['token']
+#         refresh = dict['refresh']
+#         username = dict['username']
+#     except KeyError:
+#         return 'wrong_specs'
 
-    if token:
-        key = settings.SECRET_KEY
+#     key = settings.SECRET_KEY
     
-    payload = jwt.decode(token, key, algorithms=["HS512"])
-    print(payload)
+#     try:
 
-    user = User.objects.filter(id= payload["user_id"])
+#         payload = jwt.decode(token, key, algorithms=["HS512"])
+#         print(payload)
 
-    if user[0].username == username:
-        print(user[0].id, user[0].username)
-        return dict
-    else:
-        return 'wrong_username'
+#         user = User.objects.filter(id= payload["user_id"])
+
+#         if user[0].username == username:
+#             print(user[0].id, user[0].username)
+#             return dict
+#         else:
+#             return 'wrong_username'
+
+#     except jwt.ExpiredSignatureError:
+#         print('expired: new token')
+
+#         url = 'http://127.0.0.1:8000/api/token/refresh/'
+#         data = {'refresh': refresh}
+#         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
+#         print(request)
+
+
+# auth_user_tokens("token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyODU4MjYyLCJqdGkiOiI3NTNkOTJmMjA1NGU0Y2I4OTVkYjgzZDIzMDQ1NjBhZCIsInVzZXJfaWQiOjI2fQ.19PnXIDLO4pp2lupWnpdSTPiqBdMK3AoqTLdYzYTyLhEFCEZ-ZiUulMawy6nmQA6xjpW-w3WG186AuuKYoFSpQ; refresh=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzMjkzNzQ2MiwianRpIjoiODY5OGI4OWQyZDZjNGJkMDk1M2U2N2YwNTMyZTI5ZTMiLCJ1c2VyX2lkIjoyNn0.aqWQah_7606mc0SMMbKHSym6O13WU4rsslcI8BbPHqCYM2QOk8OBHbWjhwQKnQdh6j_zZffpx_gpfMo9My2MvA; username=shahed")
