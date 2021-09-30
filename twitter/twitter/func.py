@@ -85,7 +85,7 @@ def auth_user_tokens(dict):
     except jwt.ExpiredSignatureError:
         print('expired: new token')
 
-        url = 'http://127.0.0.1:8000/api/token/refresh/'
+        url = 'http://127.0.0.1:8000/accounts/token/refresh/'
         data = {'refresh': refresh}
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
         return request

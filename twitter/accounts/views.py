@@ -223,8 +223,10 @@ def prac(request):
     data = request.data
     http_cookie = request.META.get("HTTP_COOKIE")
     auth_info_dict = func.cookie_value_to_dict(http_cookie)
+
+    auths = func.auth_user_tokens(auth_info_dict)
     
-    return Response(auth_info_dict)
+    return Response(auths)
 
 
     # refresh_token = request.headers.get("refresh")
