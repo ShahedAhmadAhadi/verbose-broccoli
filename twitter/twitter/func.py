@@ -61,6 +61,7 @@ def previous_char_str(str):
 def auth_user_tokens(dict):
     token = dict['token']
     refresh = dict['refresh']
+    username = dict['username']
 
     if token:
         key = settings.SECRET_KEY
@@ -70,11 +71,8 @@ def auth_user_tokens(dict):
 
     user = User.objects.filter(id= payload["user_id"])
 
-    data["user"] = user[0].id
-    print(user[0].id)
-
-    serializer = UserInfoSerializer(data=data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-
-    user_info = serializer.data
+    if user[0].username == username:
+        print(user[0].id, user[0].username)
+        return dict
+    else:
+        return 'wrong_username'
