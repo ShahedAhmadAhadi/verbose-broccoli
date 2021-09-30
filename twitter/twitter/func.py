@@ -1,3 +1,8 @@
+from django.conf import settings
+from django.contrib.auth.models import User
+import jwt
+
+
 def cookie_value_to_dict(str):
     data = {}
 
@@ -52,3 +57,24 @@ def previous_char_str(str):
         pass
 
 # cookie_value_to_str('sdlfjr')
+
+def auth_user_tokens(dict):
+    token = dict['token']
+    refresh = dict['refresh']
+
+    if token:
+        key = settings.SECRET_KEY
+    
+    payload = jwt.decode(token, key, algorithms=["HS512"])
+    print(payload)
+
+    user = User.objects.filter(id= payload["user_id"])
+
+    data["user"] = user[0].id
+    print(user[0].id)
+
+    serializer = UserInfoSerializer(data=data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+    user_info = serializer.data
