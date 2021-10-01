@@ -20,6 +20,8 @@ import jwt, socket
 from datetime import datetime, timedelta, timezone, tzinfo
 from django.contrib.auth.models import User
 from twitter import func
+from django.contrib.auth import authenticate
+from django.forms.models import model_to_dict
 
 
 # Create your views here.
@@ -232,9 +234,18 @@ def prac(request):
 
     if request.method == "POST":
         data = request.data
-        user = User.objects.filter(username=data['username'])
+        user = authenticate(username=data['username'], password=data['password'])
+        print(user)
 
-        if user:
+        refresh = RefreshToken.for_user(user)
+
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+        data["username"] = user.username
+
+
+        return Response(data)
+
             
 
     # refresh_token = request.headers.get("refresh")

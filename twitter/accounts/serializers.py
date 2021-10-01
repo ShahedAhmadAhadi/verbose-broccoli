@@ -54,3 +54,4 @@ class EmailVerificationSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=1000)
 
 
+
