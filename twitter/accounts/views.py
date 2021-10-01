@@ -218,16 +218,24 @@ def register_phase_two(request):
         return Response({"error": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(["POST"])
+@api_view(["POST", "GET"])
 def prac(request):
-    data = request.data
-    http_cookie = request.META.get("HTTP_COOKIE")
-    auth_info_dict = func.cookie_value_to_dict(http_cookie)
 
-    auths = func.auth_user_tokens(auth_info_dict)
-    
-    return Response(auths)
+    if request.method == "GET":
+        http_cookie = request.META.get("HTTP_COOKIE")
+        auth_info_dict = func.cookie_value_to_dict(http_cookie)
 
+        auths = func.auth_user_tokens(auth_info_dict)
+        
+        return Response(auths)
+        
+
+    if request.method == "POST":
+        data = request.data
+        user = User.objects.filter(username=data['username'])
+
+        if user:
+            
 
     # refresh_token = request.headers.get("refresh")
     # key = settings.SECRET_KEY
