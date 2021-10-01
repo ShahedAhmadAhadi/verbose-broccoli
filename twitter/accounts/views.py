@@ -226,25 +226,35 @@ def prac(request):
     if request.method == "GET":
         http_cookie = request.META.get("HTTP_COOKIE")
         auth_info_dict = func.cookie_value_to_dict(http_cookie)
+        print(request.META)
 
         auths = func.auth_user_tokens(auth_info_dict)
         
-        return Response(auths)
+        return Response('auths')
         
 
     if request.method == "POST":
         data = request.data
         user = authenticate(username=data['username'], password=data['password'])
-        print(user)
 
-        refresh = RefreshToken.for_user(user)
+        refresh_tokens = RefreshToken.for_user(user)
 
-        data["refresh"] = str(refresh)
-        data["access"] = str(refresh.access_token)
-        data["username"] = user.username
+        refresh = str(refresh_tokens)
+        access = str(refresh_tokens.access_token)
+        username = user.username
 
+        print(refresh, access, username)
 
-        return Response(data)
+        data.pop('password')
+
+        if access and refresh:
+            response = Response({'username': user.username}, status=status.HTTP_200_OK)
+            response.set_cookie("token", access, httponly=True)
+            response.set_cookie("refresh", refresh, httponly=True)
+            response.set_cookie("username", username, httponly=True)
+            return response
+
+        return Response(user)
 
             
 
