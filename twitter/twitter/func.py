@@ -92,6 +92,7 @@ def auth_user_tokens(dict):
         url = 'http://127.0.0.1:8000/accounts/token/refresh/'
         data = {'refresh': refresh}
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
+        request.set_cookie('token', data, httponly=True)
         return request
 
 
