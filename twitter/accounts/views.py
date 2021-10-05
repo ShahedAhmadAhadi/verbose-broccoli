@@ -225,12 +225,13 @@ def prac(request):
 
     if request.method == "GET":
         http_cookie = request.META.get("HTTP_COOKIE")
+
         auth_info_dict = func.cookie_value_to_dict(http_cookie)
-        print(request.META)
+        # print(request.META)
 
         auths = func.auth_user_tokens(auth_info_dict)
         
-        return Response('auths')
+        return Response(auths)
         
 
     if request.method == "POST":
