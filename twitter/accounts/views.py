@@ -230,7 +230,9 @@ def prac(request):
         # print(request.META)
 
         auths = func.auth_user_tokens(auth_info_dict)
-        return Response('auths')
+        response = Response()
+        response.set_cookie('token', auths['access'], httponly=True)
+        return response
         
 
     if request.method == "POST":
@@ -242,8 +244,6 @@ def prac(request):
         refresh = str(refresh_tokens)
         access = str(refresh_tokens.access_token)
         username = user.username
-
-        print(refresh, access, username)
 
         data.pop('password')
 
