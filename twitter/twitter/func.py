@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 import jwt, requests, json
 
+from rest_framework.response import Response
+
 
 def cookie_value_to_dict(str):
     data = {}
@@ -92,8 +94,11 @@ def auth_user_tokens(dict):
         url = 'http://127.0.0.1:8000/accounts/token/refresh/'
         data = {'refresh': refresh}
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
-        request.set_cookie('token', data, httponly=True)
-        return request
+        response_result = request.json()
+        new_access_token = response_result['access']
+        response = Response()
+        response.set_cookie('token', new_access_token, httponly=True)
+        return response
 
 
 # auth_user_tokens("token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMyODU4MjYyLCJqdGkiOiI3NTNkOTJmMjA1NGU0Y2I4OTVkYjgzZDIzMDQ1NjBhZCIsInVzZXJfaWQiOjI2fQ.19PnXIDLO4pp2lupWnpdSTPiqBdMK3AoqTLdYzYTyLhEFCEZ-ZiUulMawy6nmQA6xjpW-w3WG186AuuKYoFSpQ; refresh=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzMjkzNzQ2MiwianRpIjoiODY5OGI4OWQyZDZjNGJkMDk1M2U2N2YwNTMyZTI5ZTMiLCJ1c2VyX2lkIjoyNn0.aqWQah_7606mc0SMMbKHSym6O13WU4rsslcI8BbPHqCYM2QOk8OBHbWjhwQKnQdh6j_zZffpx_gpfMo9My2MvA; username=shahed")

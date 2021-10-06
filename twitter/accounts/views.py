@@ -230,8 +230,7 @@ def prac(request):
         # print(request.META)
 
         auths = func.auth_user_tokens(auth_info_dict)
-        
-        return Response(auths)
+        return Response('auths')
         
 
     if request.method == "POST":
