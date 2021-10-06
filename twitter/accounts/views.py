@@ -230,8 +230,8 @@ def prac(request):
         # print(request.META)
 
         auths = func.auth_user_tokens(auth_info_dict)
-        response = Response()
-        response.set_cookie('token', auths['access'], httponly=True)
+        response = Response({'auths': 'auths'})
+        response.set_cookie('token', auths['token'], httponly=True)
         return response
         
 
