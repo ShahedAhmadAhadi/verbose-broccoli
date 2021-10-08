@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 import jwt, requests, json
+from jwt import exceptions
 
 from rest_framework.response import Response
 
@@ -94,13 +95,16 @@ def auth_user_tokens(dict):
         data = {'refresh': refresh}
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
         response_result = request.json()
-        
-        print(response_result)
-        # dict['token'] = response_result['access']
+        try: 
+            dict['token'] = response_result['access']
+            print(response_result)
+            return dict
+        except exceptions.InvalidKeyError:
+            dict.update(response_result)
+            return dict
         # new_access_token = response_result['access']
         # response = Response()
         # response.set_cookie('token', new_access_token, httponly=True)
-        return dict
     except jwt.InvalidTokenError:
         return {'error': 'wrong_token'}
 
