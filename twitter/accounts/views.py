@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from rest_framework import serializers, status
@@ -233,9 +234,11 @@ def prac(request):
         response = Response({'auths': 'auths'})
         try:
             response.set_cookie('token', auths['token'], httponly=True)
-            return response
+            print(auths, 'try')
+            return response['data']
         except:
-            return response.content({auths})
+            response.data = auths
+            return response
         
 
     if request.method == "POST":
