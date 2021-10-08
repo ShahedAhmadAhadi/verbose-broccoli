@@ -94,7 +94,9 @@ def auth_user_tokens(dict):
         data = {'refresh': refresh}
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
         response_result = request.json()
-        dict['token'] = response_result['access']
+        
+        print(response_result)
+        # dict['token'] = response_result['access']
         # new_access_token = response_result['access']
         # response = Response()
         # response.set_cookie('token', new_access_token, httponly=True)

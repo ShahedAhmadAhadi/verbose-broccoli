@@ -231,8 +231,11 @@ def prac(request):
 
         auths = func.auth_user_tokens(auth_info_dict)
         response = Response({'auths': 'auths'})
-        response.set_cookie('token', auths['token'], httponly=True)
-        return response
+        try:
+            response.set_cookie('token', auths['token'], httponly=True)
+            return response
+        except:
+            return response.content({auths})
         
 
     if request.method == "POST":
