@@ -233,10 +233,12 @@ def prac(request):
         auths = func.auth_user_tokens(auth_info_dict)
         response = Response({'auths': 'auths'})
         try:
-            response.set_cookie('token', auths['token'], httponly=True)
+            # response.set_cookie('token', auths['token'], httponly=True)
+            
             print(auths, 'try')
             return response['data']
         except:
+            response.set_cookie(auth_info_dict, httponly=True)
             response.data = auths
             return response
         

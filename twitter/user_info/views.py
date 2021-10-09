@@ -12,6 +12,7 @@ from .models import UserInfo
 from rest_framework.parsers import JSONParser, BaseParser
 import jwt
 from django.contrib.auth.models import User
+from twitter import func
 
 # Create your views here.
 
@@ -26,9 +27,18 @@ def user_info(request, id):
 @api_view(['POST'])
 def add_user_info(request, format=None):
     data = request.data
-    access_token = request.META.get("HTTP_COOKIE")
-    refresh_token = request.headers.get("refresh_token")
-    return Response(access_token)
+    http_cookie = request.META.get("HTTP_COOKIE")
+
+    dict_user_authentications = func.cookie_value_to_dict(http_cookie)
+
+    auths = func.auth_user_tokens(dict_user_authentications)
+
+    # try:
+
+
+    # print(auths)
+    return Response('a')
+    # if auths == dict_user_authentications
 
     if access_token:
         key = settings.SECRET_KEY
