@@ -73,9 +73,8 @@ def auth_user_tokens(dict):
 
         if user[0].username == username:
             print(user[0].id, user[0].username)
-            response = Response()
-            response.set_cookie()
-            return Response()
+            # response = Response()
+            return dict
         else:
             return 'wrong_username'
 
@@ -109,10 +108,22 @@ def auth_user_request(request):
     # print(request.META)
 
     auths = auth_user_tokens(auth_info_dict)
-
+    response = Response()
+    try:
+        response.set_cookie('token', auths['token'], httponly=True)
+            
+        print(auths, 'try')
+        return {'response': response, 'condition': True}
+    except:
+        # response.set_cookie(, httponly=True)
+        response.data = auths
+        print(auths, 'except')
+        return {'response': response, 'condition': False}
     
     # response = Response({'auths': 'auths'})
     print(auths)
 
     return {'response': Response('a'), 'condition': True}
     Response(request)
+
+

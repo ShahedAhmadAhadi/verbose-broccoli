@@ -225,7 +225,7 @@ def register_phase_two(request):
 def prac(request):
 
     a = func.auth_user_request(request)
-    print(a)
+    print(a["response"], type(a))
     return a['response']
 
     if request.method == "GET":
