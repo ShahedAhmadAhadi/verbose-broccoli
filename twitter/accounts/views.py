@@ -224,6 +224,10 @@ def register_phase_two(request):
 @api_view(["POST", "GET"])
 def prac(request):
 
+    a = func.auth_user_request(request)
+    print(a)
+    return a['response']
+
     if request.method == "GET":
         http_cookie = request.META.get("HTTP_COOKIE")
 
