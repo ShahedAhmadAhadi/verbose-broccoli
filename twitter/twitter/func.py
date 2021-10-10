@@ -111,7 +111,7 @@ def auth_user_request(request):
     response = Response()
     try:
         response.set_cookie('token', auths['token'], httponly=True)
-            
+        response.data = auths
         print(auths, 'try')
         return {'response': response, 'condition': True}
     except:
