@@ -118,9 +118,9 @@ def auth_user_request(request):
         # response.set_cookie(, httponly=True)
         response.data = auths
         print(auths, 'except')
-        # response.delete_cookie('token')
-        # response.delete_cookie('refresh')
-        # response.delete_cookie('username')
+        response.delete_cookie('token')
+        response.delete_cookie('refresh')
+        response.delete_cookie('username')
         return {'response': response, 'condition': False}
     
     # response = Response({'auths': 'auths'})
