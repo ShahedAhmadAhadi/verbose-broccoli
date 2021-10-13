@@ -103,12 +103,16 @@ def auth_user_tokens(dict):
 def auth_user_request(request):
 
     http_cookie = request.META.get("HTTP_COOKIE")
+    response = Response()
+    # auth_info_dict = cookie_value_to_dict(http_cookie)
+    try:
+        auth_info_dict = cookie_value_to_dict(http_cookie)
 
-    auth_info_dict = cookie_value_to_dict(http_cookie)
-    # print(request.META)
+    except AttributeError:
+        response.data = {'error': 'no_validations'}
+        return {'response': response, 'condition': False}
 
     auths = auth_user_tokens(auth_info_dict)
-    response = Response()
     try:
         response.set_cookie('token', auths['token'], httponly=True)
         response.data = auths
