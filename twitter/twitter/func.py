@@ -113,19 +113,28 @@ def auth_user_request(request):
         return {'response': response, 'condition': False}
 
     auths = auth_user_tokens(auth_info_dict)
+
     try:
         response.set_cookie('token', auths['token'], httponly=True)
+        response.set_cookie('username', 'shahed', httponly=True)
         response.data = auths
         print(auths, 'try')
         return {'response': response, 'condition': True}
     except:
+        if type(auths) == dict:
         # response.set_cookie(, httponly=True)
-        response.data = auths
-        print(auths, 'except')
-        response.delete_cookie('token')
-        response.delete_cookie('refresh')
-        response.delete_cookie('username')
-        return {'response': response, 'condition': False}
+            response.data = auths
+            print(auths, 'except')
+            response.delete_cookie('token')
+            response.delete_cookie('refresh')
+            response.delete_cookie('username')
+            return {'response': response, 'condition': False}
+        else:
+            response.data = auths
+            response.delete_cookie('token')
+            response.delete_cookie('refresh')
+            response.delete_cookie('username')
+            return {'response': response, 'condition': False}
     
     # response = Response({'auths': 'auths'})
     print(auths)
