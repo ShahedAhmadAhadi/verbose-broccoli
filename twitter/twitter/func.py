@@ -121,25 +121,31 @@ def auth_user_request(request):
         print(auths, 'try')
         return {'response': response, 'condition': True}
     except:
-        if type(auths) == dict:
-        # response.set_cookie(, httponly=True)
-            response.data = auths
-            print(auths, 'except')
-            response.delete_cookie('token')
-            response.delete_cookie('refresh')
-            response.delete_cookie('username')
-            return {'response': response, 'condition': False}
-        else:
-            response.data = auths
-            response.delete_cookie('token')
-            response.delete_cookie('refresh')
-            response.delete_cookie('username')
-            return {'response': response, 'condition': False}
+        response.data = auths
+        print(auths, 'except')
+        response.delete_cookie('token')
+        response.delete_cookie('refresh')
+        response.delete_cookie('username')
+        return {'response': response, 'condition': False}
+    #     if type(auths) == dict:
+    #     # response.set_cookie(, httponly=True)
+    #         response.data = auths
+    #         print(auths, 'except')
+    #         response.delete_cookie('token')
+    #         response.delete_cookie('refresh')
+    #         response.delete_cookie('username')
+    #         return {'response': response, 'condition': False}
+    #     else:
+    #         response.data = auths
+    #         response.delete_cookie('token')
+    #         response.delete_cookie('refresh')
+    #         response.delete_cookie('username')
+    #         return {'response': response, 'condition': False}
     
-    # response = Response({'auths': 'auths'})
-    print(auths)
+    # # response = Response({'auths': 'auths'})
+    # print(auths)
 
-    return {'response': Response('a'), 'condition': True}
-    Response(request)
+    # return {'response': Response('a'), 'condition': True}
+    # Response(request)
 
 
