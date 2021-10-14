@@ -27,13 +27,20 @@ def user_info(request, id):
 @api_view(['POST'])
 def add_user_info(request, format=None):
     data = request.data
-    http_cookie = request.META.get("HTTP_COOKIE")
+    # http_cookie = request.META.get("HTTP_COOKIE")
 
-    dict_user_authentications = func.cookie_value_to_dict(http_cookie)
+    # dict_user_authentications = func.cookie_value_to_dict(http_cookie)
 
-    auths = func.auth_user_tokens(dict_user_authentications)
+    # auths = func.auth_user_tokens(dict_user_authentications)
 
-    # try:
+    auths = func.auth_user_request(request)
+    print(auths["response"], auths["condition"])
+    if auths["condition"]:
+        http_cookie = request.META.get("HTTP_COOKIE")
+        auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
+        return auths["response"]
+    else:
+        return auths["response"]
 
 
     # print(auths)
