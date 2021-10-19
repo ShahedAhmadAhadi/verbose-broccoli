@@ -36,9 +36,13 @@ def add_user_info(request, format=None):
     auths = func.auth_user_request(request)
     print(auths["response"], auths["condition"])
     if auths["condition"]:
-        http_cookie = request.META.get("HTTP_COOKIE")
-        auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
-        return auths["response"]
+        # http_cookie = request.META.get("HTTP_COOKIE")
+        # auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
+        serializer = UserInfoSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user_info = serializer.data
+        return user_info
     else:
         return auths["response"]
 
@@ -62,13 +66,10 @@ def add_user_info(request, format=None):
         data["user"] = user[0].id
         print(user[0].id)
 
-        serializer = UserInfoSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        user_info = serializer.data
 
         return Response(user_info, status=status.HTTP_201_CREATED)
 
     except jwt.ExpiredSignatureError:
         pass
+
+
