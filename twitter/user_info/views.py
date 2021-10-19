@@ -38,10 +38,14 @@ def add_user_info(request, format=None):
     if auths["condition"]:
         # http_cookie = request.META.get("HTTP_COOKIE")
         # auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
+        user = User.objects.get(username = auths["data"]["username"])
+        print(user.id)
+        data.update({'user': user.id})
         serializer = UserInfoSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user_info = serializer.data
+        
         return user_info
     else:
         return auths["response"]
