@@ -45,8 +45,9 @@ def add_user_info(request, format=None):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user_info = serializer.data
-        
-        return user_info
+        auths["response"].data = user_info
+        print(user_info)
+        return auths["response"]
     else:
         return auths["response"]
 
