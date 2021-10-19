@@ -116,7 +116,7 @@ def auth_user_request(request):
 
     try:
         response.set_cookie('token', auths['token'], httponly=True)
-        response.set_cookie('username', 'shahed', httponly=True)
+        # response.set_cookie('username', 'shahed', httponly=True)
         response.data = auths
         print(auths, 'try')
         return {'response': response, 'condition': True}

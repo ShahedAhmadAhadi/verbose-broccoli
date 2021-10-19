@@ -16,15 +16,15 @@ from twitter import func
 
 # Create your views here.
 
+
 @api_view(["GET"])
 def user_info(request, id):
-    queryset = UserInfo.objects.filter(id = id)
+    queryset = UserInfo.objects.filter(id=id)
     serializer = UserInfoSerializer(queryset, many=True)
     return Response(serializer.data)
 
 
-
-@api_view(['POST'])
+@api_view(["POST"])
 def add_user_info(request, format=None):
     data = request.data
     # http_cookie = request.META.get("HTTP_COOKIE")
@@ -42,21 +42,22 @@ def add_user_info(request, format=None):
     else:
         return auths["response"]
 
-
     # print(auths)
-    return Response('a')
+    return Response("a")
     # if auths == dict_user_authentications
 
     if access_token:
         key = settings.SECRET_KEY
     else:
-        return Response({'Error': "NO token found"}, status=status.HTTP_401_UNAUTHORIZED)
-    
+        return Response(
+            {"Error": "NO token found"}, status=status.HTTP_401_UNAUTHORIZED
+        )
+
     try:
         payload = jwt.decode(access_token, key, algorithms=["HS512"])
         print(payload)
 
-        user = User.objects.filter(id= payload["user_id"])
+        user = User.objects.filter(id=payload["user_id"])
 
         data["user"] = user[0].id
         print(user[0].id)
@@ -71,4 +72,3 @@ def add_user_info(request, format=None):
 
     except jwt.ExpiredSignatureError:
         pass
-
