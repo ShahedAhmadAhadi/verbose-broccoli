@@ -224,14 +224,6 @@ def register_phase_two(request):
 @api_view(["POST", "GET"])
 def prac(request):
 
-    # b = request.META.get("HTTP_COOKIE")
-
-    # a = func.auth_user_request(request)
-    # print(a["response"], type(a))
-    # # a["response"].set_cookie('token', '', httponly=True)
-    # a["response"].data = {'acondition': 'a'}
-    # return a['response']
-
     if request.method == "GET":
 
         auths = func.auth_user_request(request)
@@ -246,21 +238,20 @@ def prac(request):
         # print(request.META)
 
         auths = func.auth_user_tokens(auth_info_dict)
-        response = Response({'auths': 'auths'})
+        response = Response({"auths": "auths"})
         try:
             # response.set_cookie('token', auths['token'], httponly=True)
-            
-            print(auths, 'try')
-            return response['data']
+
+            print(auths, "try")
+            return response["data"]
         except:
             response.set_cookie(auth_info_dict, httponly=True)
             response.data = auths
             return response
-        
 
     if request.method == "POST":
         data = request.data
-        user = authenticate(username=data['username'], password=data['password'])
+        user = authenticate(username=data["username"], password=data["password"])
 
         refresh_tokens = RefreshToken.for_user(user)
 
@@ -268,36 +259,13 @@ def prac(request):
         access = str(refresh_tokens.access_token)
         username = user.username
 
-        data.pop('password')
+        data.pop("password")
 
         if access and refresh:
-            response = Response({'username': user.username}, status=status.HTTP_200_OK)
+            response = Response({"username": user.username}, status=status.HTTP_200_OK)
             response.set_cookie("token", access, httponly=True)
             response.set_cookie("refresh", refresh, httponly=True)
             response.set_cookie("username", username, httponly=True)
             return response
 
         return Response(user)
-
-            
-
-    # refresh_token = request.headers.get("refresh")
-    # key = settings.SECRET_KEY
-    # print((access_token.get('token')))
-    # return Response(key)
-    # try:
-        
-    #     payload = jwt.decode(access_token, key, algorithms=["HS512"])
-
-    #     user = User.objects.filter(id= payload["user_id"])
-    #     print(user)
-    #     # ["access_token"]
-    #     # ["HTTP_COOKIE"]
-    #     # for i in data: 
-    #     #     print(i)
-    #     return Response({'result': 'done'})
-    # except jwt.ExpiredSignatureError:
-    #     payload = jwt.decode(refresh_token, key, algorithms=['HS512'])
-    #     user = User.objects.filter(id = payload["user_id"])
-    #     return Response(user[0].username)
-

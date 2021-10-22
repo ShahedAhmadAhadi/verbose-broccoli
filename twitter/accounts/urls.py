@@ -9,7 +9,7 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("registerE/", register_phase_one),
-    path('email-verify', VerifyEmail.as_view(), name='verify_email'),
-    path('register/', register_phase_two),
-    path('prac/', prac)
+    path("email-verify/", VerifyEmail.as_view(), name="verify_email"),
+    path("register/", register_phase_two),
+    path("prac/", prac),
 ]
