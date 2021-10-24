@@ -221,8 +221,17 @@ def register_phase_two(request):
         return Response({"error": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(["POST", "GET"])
+@api_view(["POST", "GET", "PATCH"])
 def prac(request):
+
+    if request.methos == "PATCH":
+        auths = func.auth_user_request(request)
+        print(auths["response"], auths["condition"])
+        # serializer = TestModelSerializer(testmodel_object, data=request.data, partial=True) # set partial=True to update a data partially
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     return JsonResponse(code=201, data=serializer.data)
+        return JsonResponse(code=400, data="wrong parameters")
 
     if request.method == "GET":
 
