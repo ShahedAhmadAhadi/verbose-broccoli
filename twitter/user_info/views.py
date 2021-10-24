@@ -33,11 +33,12 @@ def add_user_info(request, format=None):
         print(auths["response"], auths["condition"])
         user = User.objects.get(username= auths["data"]["username"])
         print(user)
-        serializer = UserInfoSerializer(user, data=request.data, partial=True)
-        auths["data"].update(serializer)
-        auths["response"].data = auths["data"]
+        data.update({'user': user.id})
+        serializer = UserInfoSerializer(data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            auths["data"].update(serializer)
+            auths["response"].data = auths["data"]
             return auths["response"]
         return auths["response"]
 
