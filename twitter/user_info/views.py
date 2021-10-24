@@ -24,9 +24,23 @@ def user_info(request, id):
     return Response(serializer.data)
 
 
-@api_view(["POST"])
+@api_view(["POST", "PATCH"])
 def add_user_info(request, format=None):
     data = request.data
+    
+    if request.method == "PATCH":
+        auths = func.auth_user_request(request)
+        print(auths["response"], auths["condition"])
+        user = User.objects.get(username= auths["data"]["username"])
+        print(user)
+        serializer = UserInfoSerializer(user, data=request.data, partial=True)
+        auths["data"].update(serializer)
+        auths["response"].data = auths["data"]
+        if serializer.is_valid():
+            serializer.save()
+            return auths["response"]
+        return auths["response"]
+
     # http_cookie = request.META.get("HTTP_COOKIE")
 
     # dict_user_authentications = func.cookie_value_to_dict(http_cookie)

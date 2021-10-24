@@ -224,14 +224,17 @@ def register_phase_two(request):
 @api_view(["POST", "GET", "PATCH"])
 def prac(request):
 
-    if request.methos == "PATCH":
-        auths = func.auth_user_request(request)
-        print(auths["response"], auths["condition"])
-        # serializer = TestModelSerializer(testmodel_object, data=request.data, partial=True) # set partial=True to update a data partially
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return JsonResponse(code=201, data=serializer.data)
-        return JsonResponse(code=400, data="wrong parameters")
+    # if request.method == "PATCH":
+    #     auths = func.auth_user_request(request)
+    #     print(auths["response"], auths["condition"])
+    #     user = User.objects.get(username= auths["data"]["username"])
+    #     print(user)
+    #     serializer = TestModelSerializer(testmodel_object, data=request.data, partial=True) # set partial=True to update a data partially
+    #     # if serializer.is_valid():
+    #     #     serializer.save()
+    #     #     return JsonResponse(code=201, data=serializer.data)
+    #     auths["response"].data = auths["data"] 
+    #     return auths["response"]
 
     if request.method == "GET":
 
