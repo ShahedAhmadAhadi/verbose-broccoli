@@ -24,6 +24,7 @@ class UserInfoSerializer(serializers.Serializer):
         instance.gender = validated_data.get('gender', instance.gender)
         instance.about = validated_data.get('about', instance.about)
         instance.image = validated_data.get('image', instance.image)
-        # instance.save()
+        instance.save()
+        return instance
 
         return super().update(instance, validated_data)
