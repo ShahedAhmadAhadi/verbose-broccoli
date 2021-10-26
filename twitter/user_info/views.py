@@ -99,6 +99,6 @@ def add_user_info(request, format=None):
 def user_info_data(request, property):
     data = request.data
 
-    return Response('ok')
+    return Response({'e': property})
 
 
