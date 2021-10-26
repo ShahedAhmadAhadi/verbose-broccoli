@@ -95,5 +95,10 @@ def add_user_info(request, format=None):
         pass
 
 
+@api_view(["GET"])
+def user_info_data(request, property):
+    data = request.data
+
+    return Response('ok')
 
 
