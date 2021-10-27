@@ -104,6 +104,11 @@ def user_info_data(request, property):
     print(auths["response"], auths["condition"])
     user = User.objects.get(username = username)
 
+    # user_data = {}
+    # user_data.update(UserInfo.objects.get(user = user.id))
+    user_data = UserInfo.objects.filter(user = user.id)
+    serializer = UserInfoSerializer(user_data, many=True)
+    print(serializer.data[0][property])
     try:
         pass
     except:
