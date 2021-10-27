@@ -97,8 +97,18 @@ def add_user_info(request, format=None):
 
 @api_view(["GET"])
 def user_info_data(request, property):
-    data = request.data
+    # data = request.data
 
-    return Response({'e': property})
+    auths = func.auth_user_request(request)
+    username = auths["data"]["username"]
+    print(auths["response"], auths["condition"])
+    user = User.objects.get(username = username)
+
+    try:
+        pass
+    except:
+        pass
+
+    return Response({'e': user.username})
 
 
