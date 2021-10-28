@@ -102,18 +102,20 @@ def user_info_data(request, property):
     auths = func.auth_user_request(request)
     username = auths["data"]["username"]
     print(auths["response"], auths["condition"])
-    user = User.objects.get(username = username)
 
-    # user_data = {}
-    # user_data.update(UserInfo.objects.get(user = user.id))
-    user_data = UserInfo.objects.filter(user = user.id)
-    serializer = UserInfoSerializer(user_data, many=True)
-    print(serializer.data[0][property])
-    try:
-        pass
-    except:
-        pass
+    if auths["condition"]:
+        user = User.objects.get(username = username)
 
-    return Response({'e': user.username})
+        # user_data = {}
+        # user_data.update(UserInfo.objects.get(user = user.id))
+        user_data = UserInfo.objects.filter(user = user.id)
+        serializer = UserInfoSerializer(user_data, many=True)
+        try:
+            print(serializer.data[0][property])
+            auths["response"].data = serializer.data[0][property]
+            return auths["response"]
+        except:
+            auths["response"].data = {'error': 'wrong_property_requested'}
+            return auths["response"]
 
 
