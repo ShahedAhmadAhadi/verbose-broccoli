@@ -117,5 +117,8 @@ def user_info_data(request, property):
         except:
             auths["response"].data = {'error': 'wrong_property_requested'}
             return auths["response"]
+    
+    else:
+        return Response({'error': 'no_auths'})
 
 
