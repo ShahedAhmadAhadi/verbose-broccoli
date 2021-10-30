@@ -60,6 +60,7 @@ def auth_user_tokens(dict):
         token = dict['token']
         refresh = dict['refresh']
         username = dict['username']
+        print(dict)
     except KeyError:
         return 'wrong_specs'
 
@@ -70,7 +71,7 @@ def auth_user_tokens(dict):
 
         user = User.objects.filter(id= payload["user_id"])
 
-        if user[0].username == username:
+        if user[0].id == username:
             print(user[0].id, user[0].username)
             # response = Response()
             return dict

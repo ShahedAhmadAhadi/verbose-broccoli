@@ -269,7 +269,7 @@ def prac(request):
 
         refresh = str(refresh_tokens)
         access = str(refresh_tokens.access_token)
-        username = user.username
+        username = user.id
 
         data.pop("password")
 
