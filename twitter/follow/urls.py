@@ -2,5 +2,5 @@ from django.urls import path
 from .views import follow
 
 urlpatterns = [
-    path('follow/<str:username>', follow)
+    path('<str:username>/', follow)
 ]

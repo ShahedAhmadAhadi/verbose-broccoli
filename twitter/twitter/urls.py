@@ -25,5 +25,6 @@ urlpatterns = [
     path('', tweet_view.tweet),
     path('accounts/', include('accounts.urls')),
     path('demo/', tweet_view.DemoView.as_view()),
-    path('user/', include('user_info.urls'))
+    path('user/', include('user_info.urls')),
+    path('follow/', include('follow.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
