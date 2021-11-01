@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class UserInfoSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
     DOB = serializers.DateField()
-    gender = serializers.CharField()
+    gender = serializers.CharField(max_length=1)
     about = serializers.CharField(max_length=255)
     image = serializers.ImageField()
 

@@ -12,7 +12,7 @@ GENDER_CHOICES = [
 class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     DOB = models.DateField(null=False)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=6)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=1)
     about = models.TextField(max_length=255)
     image = models.ImageField(upload_to='userImages')
 
