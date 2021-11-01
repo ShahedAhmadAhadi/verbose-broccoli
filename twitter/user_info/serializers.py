@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import ChoiceField
 from .models import UserInfo
 from django.contrib.auth.models import User
 
