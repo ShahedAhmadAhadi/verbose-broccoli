@@ -73,7 +73,7 @@ def auth_user_tokens(dict):
         if user[0].id == payload["user_id"]:
             print(user[0].id, payload["user_id"])
             # response = Response()
-            dict["username"] = payload["user_id"]
+            dict["user_id"] = payload["user_id"]
             return dict
         else:
             return 'wrong_username'
@@ -86,7 +86,7 @@ def auth_user_tokens(dict):
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
         response_result = request.json()
         payload = jwt.decode(response_result['access'], key, algorithms=["HS512"])
-        dict["username"] = payload["user_id"]
+        dict["user_id"] = payload["user_id"]
         try: 
             # token_dict = response_result['access']
             dict['token'] = response_result['access']

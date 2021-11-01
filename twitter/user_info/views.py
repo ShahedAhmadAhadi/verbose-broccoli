@@ -30,9 +30,9 @@ def add_user_info(request, format=None):
     
     if request.method == "PATCH":
         auths = func.auth_user_request(request)
-        username = auths["data"]["username"]
+        user_id = auths["data"]["user_id"]
         print(auths["response"], auths["condition"])
-        user = User.objects.get(username = username)
+        user = User.objects.get(id = user_id)
         user_info = UserInfo.objects.get(user = user.id)
         print(user_info, 'userinfp')
         # data.update({'user': user_info.id})
@@ -55,7 +55,7 @@ def add_user_info(request, format=None):
     if auths["condition"]:
         # http_cookie = request.META.get("HTTP_COOKIE")
         # auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
-        user = User.objects.get(username = auths["data"]["username"])
+        user = User.objects.get(id = auths["data"]["user_id"])
         print(user.id)
         data.update({'user': user.id})
         serializer = UserInfoSerializer(data=data)
@@ -100,11 +100,11 @@ def user_info_data(request, property):
     # data = request.data
 
     auths = func.auth_user_request(request)
-    username = auths["data"]["username"]
-    print(auths["response"], auths["condition")
+    user_id = auths["data"]["user_id"]
+    print(auths["response"], auths["condition"])
 
     if auths["condition"]:
-        user = User.objects.get(username = username)
+        user = User.objects.get(id = user_id)
 
         # user_data = {}
         # user_data.update(UserInfo.objects.get(user = user.id))
