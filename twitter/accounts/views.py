@@ -242,7 +242,7 @@ def prac(request):
         print(auths["response"], auths["condition"])
         if auths["condition"]:
             http_cookie = request.META.get("HTTP_COOKIE")
-            auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
+            auths["response"].data = (func.cookie_value_to_dict(http_cookie))
             return auths["response"]
         else:
             return auths["response"]

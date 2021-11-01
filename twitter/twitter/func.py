@@ -59,7 +59,7 @@ def auth_user_tokens(dict):
             
         token = dict['token']
         refresh = dict['refresh']
-        username = dict['username']
+        username = int(dict['username'])
         print(dict)
     except KeyError:
         return 'wrong_specs'
@@ -76,6 +76,7 @@ def auth_user_tokens(dict):
             # response = Response()
             return dict
         else:
+            print(type(user[0].id), type(username))
             return 'wrong_username'
 
     except jwt.ExpiredSignatureError:
