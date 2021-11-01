@@ -101,7 +101,7 @@ def user_info_data(request, property):
 
     auths = func.auth_user_request(request)
     username = auths["data"]["username"]
-    print(auths["response"], auths["condition"])
+    print(auths["response"], auths["condition")
 
     if auths["condition"]:
         user = User.objects.get(username = username)

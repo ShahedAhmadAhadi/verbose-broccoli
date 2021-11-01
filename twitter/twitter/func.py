@@ -71,9 +71,9 @@ def auth_user_tokens(dict):
         user = User.objects.filter(id= payload["user_id"])
 
         if user[0].id == payload["user_id"]:
-            print(user[0].id, payload['user_id'])
+            print(user[0].id, payload["user_id"])
             # response = Response()
-            
+            dict["username"] = payload["user_id"]
             return dict
         else:
             return 'wrong_username'
@@ -85,6 +85,8 @@ def auth_user_tokens(dict):
         data = {'refresh': refresh}
         request = requests.post(url, data=json.dumps(data), headers={'content-type': 'application/json'})
         response_result = request.json()
+        payload = jwt.decode(response_result['access'], key, algorithms=["HS512"])
+        dict["username"] = payload["user_id"]
         try: 
             # token_dict = response_result['access']
             dict['token'] = response_result['access']
@@ -114,7 +116,6 @@ def auth_user_request(request):
         return {'response': response, 'condition': False}
 
     auths = auth_user_tokens(auth_info_dict)
-
     try:
         response.set_cookie('token', auths['token'], httponly=True)
         # response.set_cookie('username', 'shahed', httponly=True)
