@@ -56,10 +56,8 @@ cookie_value_to_dict("token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0b2tlbl90eXB
 
 def auth_user_tokens(dict):
     try:
-            
         token = dict['token']
         refresh = dict['refresh']
-        username = int(dict['username'])
         print(dict)
     except KeyError:
         return 'wrong_specs'
@@ -68,15 +66,16 @@ def auth_user_tokens(dict):
     
     try:
         payload = jwt.decode(token, key, algorithms=["HS512"])
+        print(payload)
 
         user = User.objects.filter(id= payload["user_id"])
 
-        if user[0].id == username:
-            print(user[0].id, user[0].username)
+        if user[0].id == payload["user_id"]:
+            print(user[0].id, payload['user_id'])
             # response = Response()
+            
             return dict
         else:
-            print(type(user[0].id), type(username))
             return 'wrong_username'
 
     except jwt.ExpiredSignatureError:
@@ -127,7 +126,6 @@ def auth_user_request(request):
         print(auths, 'except')
         response.delete_cookie('token')
         response.delete_cookie('refresh')
-        response.delete_cookie('username')
         return {'response': response, 'condition': False}
     #     if type(auths) == dict:
     #     # response.set_cookie(, httponly=True)
@@ -149,5 +147,9 @@ def auth_user_request(request):
 
     # return {'response': Response('a'), 'condition': True}
     # Response(request)
+
+
+# def hash():
+
 
 

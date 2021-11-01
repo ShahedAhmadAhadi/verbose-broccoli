@@ -277,7 +277,6 @@ def prac(request):
             response = Response({"username": user.username}, status=status.HTTP_200_OK)
             response.set_cookie("token", access, httponly=True)
             response.set_cookie("refresh", refresh, httponly=True)
-            response.set_cookie("username", username, httponly=True)
             return response
 
         return Response(user)
