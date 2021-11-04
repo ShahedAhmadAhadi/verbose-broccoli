@@ -34,7 +34,6 @@ def add_user_info(request, format=None):
         print(auths["response"], auths["condition"])
         user = User.objects.get(id = user_id)
         user_info = UserInfo.objects.get(user = user.id)
-        print(user_info, 'userinfp')
         # data.update({'user': user_info.id})
         serializer = UserInfoSerializer(instance = user_info, data=data, partial=True)
         if serializer.is_valid():
@@ -44,11 +43,6 @@ def add_user_info(request, format=None):
             return auths["response"]
         return auths["response"]
 
-    # http_cookie = request.META.get("HTTP_COOKIE")
-
-    # dict_user_authentications = func.cookie_value_to_dict(http_cookie)
-
-    # auths = func.auth_user_tokens(dict_user_authentications)
 
     auths = func.auth_user_request(request)
     print(auths["response"], auths["condition"])
