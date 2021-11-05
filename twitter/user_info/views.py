@@ -62,31 +62,31 @@ def add_user_info(request, format=None):
     else:
         return auths["response"]
 
-    # print(auths)
-    return Response("a")
-    # if auths == dict_user_authentications
+    # # print(auths)
+    # return Response("a")
+    # # if auths == dict_user_authentications
 
-    if access_token:
-        key = settings.SECRET_KEY
-    else:
-        return Response(
-            {"Error": "NO token found"}, status=status.HTTP_401_UNAUTHORIZED
-        )
+    # if access_token:
+    #     key = settings.SECRET_KEY
+    # else:
+    #     return Response(
+    #         {"Error": "NO token found"}, status=status.HTTP_401_UNAUTHORIZED
+    #     )
 
-    try:
-        payload = jwt.decode(access_token, key, algorithms=["HS512"])
-        print(payload)
+    # try:
+    #     payload = jwt.decode(access_token, key, algorithms=["HS512"])
+    #     print(payload)
 
-        user = User.objects.filter(id=payload["user_id"])
+    #     user = User.objects.filter(id=payload["user_id"])
 
-        data["user"] = user[0].id
-        print(user[0].id)
+    #     data["user"] = user[0].id
+    #     print(user[0].id)
 
 
-        return Response(user_info, status=status.HTTP_201_CREATED)
+    #     return Response(user_info, status=status.HTTP_201_CREATED)
 
-    except jwt.ExpiredSignatureError:
-        pass
+    # except jwt.ExpiredSignatureError:
+    #     pass
 
 
 @api_view(["GET"])
