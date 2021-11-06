@@ -3,6 +3,7 @@ from rest_framework.fields import ChoiceField
 from .models import UserInfo
 from django.contrib.auth.models import User
 
+
 class UserInfoSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
     DOB = serializers.DateField()
@@ -15,11 +16,10 @@ class UserInfoSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def validate_gender(self, value):
-        if value == 'M' or value == 'F':
+        if value == "M" or value == "F":
             return value
-        else: 
-            raise serializers.ValidationError('wrong_gender')
-            
+        else:
+            raise serializers.ValidationError("wrong_gender")
 
     def create(self, validated_data):
         print(validated_data)
@@ -27,11 +27,11 @@ class UserInfoSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
 
-        instance.user = validated_data.get('user', instance.user)
-        instance.DOB = validated_data.get('DOB', instance.DOB)
-        instance.gender = validated_data.get('gender', instance.gender)
-        instance.about = validated_data.get('about', instance.about)
-        instance.image = validated_data.get('image', instance.image)
+        instance.user = validated_data.get("user", instance.user)
+        instance.DOB = validated_data.get("DOB", instance.DOB)
+        instance.gender = validated_data.get("gender", instance.gender)
+        instance.about = validated_data.get("about", instance.about)
+        instance.image = validated_data.get("image", instance.image)
         instance.save()
         return instance
 

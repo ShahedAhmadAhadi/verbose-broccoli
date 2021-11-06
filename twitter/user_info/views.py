@@ -27,15 +27,15 @@ def user_info(request, id):
 @api_view(["POST", "PATCH"])
 def add_user_info(request, format=None):
     data = request.data
-    
+
     if request.method == "PATCH":
         auths = func.auth_user_request(request)
         user_id = auths["data"]["user_id"]
         print(auths["response"], auths["condition"])
-        user = User.objects.get(id = user_id)
-        user_info = UserInfo.objects.get(user = user.id)
+        user = User.objects.get(id=user_id)
+        user_info = UserInfo.objects.get(user=user.id)
         # data.update({'user': user_info.id})
-        serializer = UserInfoSerializer(instance = user_info, data=data, partial=True)
+        serializer = UserInfoSerializer(instance=user_info, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             auths["data"].update(serializer.data)
@@ -43,15 +43,14 @@ def add_user_info(request, format=None):
             return auths["response"]
         return auths["response"]
 
-
     auths = func.auth_user_request(request)
     print(auths["response"], auths["condition"])
     if auths["condition"]:
         # http_cookie = request.META.get("HTTP_COOKIE")
         # auths["response"].data.update(func.cookie_value_to_dict(http_cookie))
-        user = User.objects.get(id = auths["data"]["user_id"])
+        user = User.objects.get(id=auths["data"]["user_id"])
         print(user.id)
-        data.update({'user': user.id})
+        data.update({"user": user.id})
         serializer = UserInfoSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -82,7 +81,6 @@ def add_user_info(request, format=None):
     #     data["user"] = user[0].id
     #     print(user[0].id)
 
-
     #     return Response(user_info, status=status.HTTP_201_CREATED)
 
     # except jwt.ExpiredSignatureError:
@@ -98,21 +96,19 @@ def user_info_data(request, property):
     print(auths["response"], auths["condition"])
 
     if auths["condition"]:
-        user = User.objects.get(id = user_id)
+        user = User.objects.get(id=user_id)
 
         # user_data = {}
         # user_data.update(UserInfo.objects.get(user = user.id))
-        user_data = UserInfo.objects.filter(user = user.id)
+        user_data = UserInfo.objects.filter(user=user.id)
         serializer = UserInfoSerializer(user_data, many=True)
         try:
             print(serializer.data[0][property])
             auths["response"].data = serializer.data[0][property]
             return auths["response"]
         except:
-            auths["response"].data = {'error': 'wrong_property_requested'}
+            auths["response"].data = {"error": "wrong_property_requested"}
             return auths["response"]
-    
+
     else:
-        return Response({'error': 'no_auths'})
-
-
+        return Response({"error": "no_auths"})
